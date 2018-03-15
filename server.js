@@ -12,6 +12,16 @@ var express = require('express'),
 
 
 /**********
+* ROUTES *
+**********/
+
+app.get('/', function(req, res) {
+  res.send("hello world!");
+})
+
+
+
+/**********
  * SERVER *
  **********/
 

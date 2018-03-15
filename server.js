@@ -2,7 +2,7 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    cookieParser = requrie('cookie-parser'),
+    cookieParser = require('cookie-parser'),
     session = require('express-session'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;

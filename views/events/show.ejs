@@ -1,4 +1,4 @@
-<!-- index.ejs -->
+<!-- show.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,13 +6,26 @@
   <meta charset="UTF-8">
   <!-- set viewport to device width to make site responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Knewave|Varela+Round" rel="stylesheet">
+
   <!-- custom styles -->
-  <!-- <link rel="stylesheet" type="text/css" href="/styles/style.css"> -->
+  <link rel="stylesheet" type="text/css" href="/styles/style.css">
+  <link rel="stylesheet" type="text/css" href="/styles/landingpage.css">
   <!-- jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+  <script type="text/javascript" src="/scripts/app.js"></script>
+
   <title>Loud Crowd</title>
 </head>
 <body>
   <h1><%= event.eventName %></h1>
+
+  <div class="slidecontainer">
+  	<input type="range" min="1" max="20" value="10" class="slider" id="myRange">
+  	<p>Value: <span id="demo"></span></p>
+  </div>
 <body>
 </html>

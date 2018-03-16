@@ -61,7 +61,7 @@ app.get("/profile", function (req, res) {
     if (err) {
       res.status(500).json({ error: err.message, });
     } else {
-      res.render("index", { events: allevents, user: req.user, });
+      res.render("profile", { events: allevents, user: req.user, });
     }
   });
 });
@@ -88,7 +88,7 @@ app.post("/events", function(req, res) {
     if (err) {
       res.status(500).json({ error: err.message, });
     } else {
-      res.redirect("/");
+      res.redirect("/profile");
     }
   });
 });
@@ -118,7 +118,7 @@ app.put("/events/:id", function (req, res) {
         if (err) {
           res.status(500).json({ error: err.message, });
         } else {
-          res.redirect("/");
+          res.redirect("/profile");
         }
       });
     }
@@ -137,16 +137,16 @@ app.delete("/events/:id", function (req, res) {
 
   // find event in db by id and remove
   Event.findOneAndRemove({ _id: eventId, }, function () {
-    res.redirect("/");
+    res.redirect("/profile");
   });
 });
 
 
 // AUTH ROUTES
 
-// show signup view
+// show landingpage view
 app.get('/', function(req, res) {
-  res.render('signup', { user: req.user, });
+  res.render('landingpage', { user: req.user, });
 });
 
 // sign up new user, then log them in
@@ -171,7 +171,7 @@ app.get('/login', function (req, res) {
 
 app.post('/login', passport.authenticate('local'), function(req, res) {
   console.log(req.user);
-  res.redirect('/');
+  res.redirect('/profile');
 });
 
 // log out user
@@ -179,7 +179,7 @@ app.get('/logout', function (req, res) {
   console.log("BEFORE logout", JSON.stringify(req.user));
   req.logout();
   console.log("AFTER logout", JSON.stringify(req.user));
-  res.redirect('/signup');
+  res.redirect('/');
 });
 
 

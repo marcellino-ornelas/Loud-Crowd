@@ -1,0 +1,35 @@
+<!-- index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- set viewport to device width to make site responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- custom styles -->
+  <link rel="stylesheet" type="text/css" href="/styles/style.css">
+  <!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <title>Loud Crowd</title>
+</head>
+<body>
+  <nav>
+    <a href="about.ejs">about</a>
+    <a href="about.ejs">login</a>
+  </nav>
+
+  <h1>loud crowd</h1>
+  <h2>an app to show real time engagement during events</h2>
+  <div>
+    <h2>signup to add an event</h2>
+    <form method="POST" action="/signup">
+      <input type="text" name="firstName" class="" placeholder="first name">
+      <input type="text" name="lastName" class="" placeholder="last name">
+      <input type="email" name="email" class="" placeholder="email">
+      <input type="email" name="email" class="" placeholder="email">
+      <input type="password" name="password" class="" placeholder="Password">
+    </form>
+  </div>
+
+</body>
+</html>

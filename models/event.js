@@ -1,13 +1,13 @@
 var mongoose = require("mongoose"),
   Schema = mongoose.Schema;
 
-var PostSchema = new Schema({
+var EventSchema = new Schema({
   eventName: String,
   Rating: Number,
   lowScore: String,
   highScore: String,
 });
 
-var Post = mongoose.model("Post", PostSchema);
+var Event = mongoose.model("Event", EventSchema);
 
-module.exports = Post;
+module.exports = Event;

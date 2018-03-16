@@ -3,9 +3,10 @@ var mongoose = require("mongoose"),
 
 var EventSchema = new Schema({
   eventName: String,
-  Rating: Number,
+  rating: Number,
   lowScore: String,
   highScore: String,
+  owner: String
 });
 
 var Event = mongoose.model("Event", EventSchema);

@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-mongoose.connect("mongodb://localhost:3000");
+mongoose.connect("mongodb://localhost", {useMongoClient: true, });
 
-module.exports.User = require("./user");
 module.exports.Event = require("./event");
+module.exports.User = require("./user");

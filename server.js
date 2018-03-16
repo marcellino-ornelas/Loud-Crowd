@@ -2,7 +2,8 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    cookieParser = requrie('cookie-parser'),
+    methodOverride = require('method-override'),
+    cookieParser = require('cookie-parser'),
     session = require('express-session'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
@@ -20,6 +21,19 @@ var db = require('./models'),
 * MIDDLEWARE *
 **************/
 
+// configure bodyParser (for receiving form data)
+app.use(bodyParser.urlencoded({ extended: true, }));
+
+// serve static files from public folder
+app.use(express.static(__dirname + "/public"));
+
+// set view engine to ejs
+app.set("view engine", "ejs");
+
+app.use(methodOverride("_method"));
+
+
+
 app.use(cookieParser());
 app.use(session({
   secret: 'whereismarcellino',
@@ -35,15 +49,24 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+
 /**********
 * ROUTES *
 **********/
 
 app.get('/', function(req, res) {
-  res.send("hello world!");
+  res.render('index');
 })
 
 
+/**************
+* AUTH ROUTES *
+**************/
+
+//show langing page/signup page
+app.get('/', function(req, res) {
+
+})
 
 /**********
  * SERVER *

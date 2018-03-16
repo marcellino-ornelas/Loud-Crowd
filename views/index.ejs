@@ -7,29 +7,71 @@
   <!-- set viewport to device width to make site responsive -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- custom styles -->
-  <link rel="stylesheet" type="text/css" href="/styles/style.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/styles/style.css"> -->
   <!-- jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
   <title>Loud Crowd</title>
 </head>
 <body>
   <nav>
-    <a href="about.ejs">about</a>
-    <a href="about.ejs">login</a>
+    <a href="/about">about</a>
+    <% if(!user) { %>
+    <a href="/login">log in</a>
+    <a href="/signup">sign up</a>
+    <% } else { %>
+    <div>Welcome, <%= user.username %>!</div>
+    <a href="/logout">Log out</a>
+    <% } %>
   </nav>
 
   <h1>loud crowd</h1>
   <h2>an app to show real time engagement during events</h2>
   <div>
-    <h2>signup to add an event</h2>
-    <form method="POST" action="/signup">
-      <input type="text" name="firstName" class="" placeholder="first name">
-      <input type="text" name="lastName" class="" placeholder="last name">
-      <input type="email" name="email" class="" placeholder="email">
-      <input type="email" name="email" class="" placeholder="email">
-      <input type="password" name="password" class="" placeholder="Password">
+    <h2>add an event</h2>
+    <form method="POST" action="/events">
+      <input type="text" name="eventName" class="" placeholder="event name">
+      <input type="text" name="lowScore" class="" placeholder="not engaged"><span> -</span>
+      <input type="text" name="highScore" class="" placeholder="very engaged">
+      <input type="text" name="owner" value="<%= user.username %>" style="display: none;">
+      <input type="number" name="rating" value="5" style="display: none;">
+      <input type="submit">
     </form>
   </div>
+
+  <ul class="" id="">
+    <% for (let event of events) { %>
+      <li class="" data-id="<%= event._id %>">
+
+        <!-- post label (title) -->
+        <a href="/events/<%= event._id %>" class=""><%= event.eventName %></a>
+
+        <!-- post description -->
+        <p>Author: <%= event.owner %> </p>
+        <p><%= event.lowScore %> - <%= event.highScore %></p>
+        <p><%= event.rating %></p>
+
+          <!-- pencil icon to toggle update form -->
+          <a href="javascript:void(0)" data-toggle="collapse" data-target="#update-<%= event._id %>">
+            <button>update</button>
+          </a>
+
+          <!-- trash can icon to delete post -->
+          <form action="/events/<%= event._id %>?_method=DELETE" method="POST">
+            <button>delete</button>
+          </form>
+
+        <!-- form to update post -->
+        <form action="/events/<%= event._id %>?_method=PUT" method="POST" id="update-<%= event._id %>">
+          <input type="text" name="eventName" class="" placeholder="event name" value="<%= event.eventName %>">
+          <input type="text" name="lowScore" class="" placeholder="not engaged" value="<%= event.lowScore %>"><span> -</span>
+          <input type="text" name="highScore" class="" placeholder="very engaged" value="<%= event.highScore %>">
+          <input type="submit" value="Update">
+        </form>
+
+      </li>
+      <% } %>
+  </ul>
+
 
 </body>
 </html>

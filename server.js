@@ -56,7 +56,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // HOMEPAGE ROUTE
 
-app.get("/", function (req, res) {
+app.get("/profile", function (req, res) {
   Event.find(function (err, allevents) {
     if (err) {
       res.status(500).json({ error: err.message, });
@@ -145,20 +145,20 @@ app.delete("/events/:id", function (req, res) {
 // AUTH ROUTES
 
 // show signup view
-app.get('/signup', function(req, res) {
+app.get('/', function(req, res) {
   res.render('signup', { user: req.user, });
 });
 
 // sign up new user, then log them in
 //hashes and salts password, saves new yser to db
-app.post('/signup', function(req, res) {
+app.post('/', function(req, res) {
   User.register(new User(req.body), req.body.password, function(err, newUser) {
     if (err) {
       console.log("Error!!!" + err)
       res.status(400)
     } else {
       passport.authenticate('local')(req, res, function() {
-      res.redirect('/');
+      res.redirect('/profile');
     });
   }
   });

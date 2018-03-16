@@ -1,4 +1,3 @@
-
 $(function() {
 
   var slider = document.getElementById("myRange");

@@ -20,23 +20,27 @@
 </head>
 <body>
   <nav>
-    <a href="/about">about</a>
+    <div>
+      <a href="/about">about</a>
     <% if(!user) { %>
-    <a href="/login">log in</a>
-    <a href="/">sign up</a>
-    <% } else { %>
-    <a href="/logout">Log out</a>
+      <a href="/">sign up</a>
+    </div>
+    <div>
+      <a href="/login">log in</a>
+      <% } else { %>
+      <a href="/logout">Log out</a>
+    </div>
     <% } %>
   </nav>
 
   <h1>loud crowd</h1>
   <h2>an app to show real time engagement during events</h2>
-  <div>
+  <div class="myform">
     <h2>signup to add an event</h2>
     <form method="POST" action="/">
       <input type="text" name="username" class="" placeholder="Username">
       <input type="password" name="password" class="" placeholder="Password">
-      <input type="submit" value="sign up">
+      <input type="submit" placeholder="sign up" class="button">
     </form>
   </div>
 

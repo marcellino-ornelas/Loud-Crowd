@@ -10,13 +10,14 @@
   <!-- fonts -->
   <link href="https://fonts.googleapis.com/css?family=Knewave|Varela+Round" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
   <!-- custom styles -->
   <link rel="stylesheet" type="text/css" href="/styles/style.css">
   <link rel="stylesheet" type="text/css" href="/styles/show.css">
   <!-- jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
 
   <title>Loud Crowd</title>
@@ -24,9 +25,22 @@
 <body>
   <h1><%= event.eventName %></h1>
 
-  <div class="slidecontainer">
+  <!-- <div class="slidecontainer">
   	<input type="range" min="1" max="20" value="10" class="slider" id="myRange">
   	<p>Value: <span id="demo"></span></p>
+  </div> -->
+
+  <div>
+    <h1 id="average"> Overall Score: <%= event.average() %></h1>
   </div>
+
+  <section>
+    <h3 id="sliderValue">Score: <%= event.score || 10 %></h3>
+    <div id="slider"></div>
+    <button type="button" id="scoreUpdate" data-event-id="<%= event._id %>"> Save </button>
+  </section>
+
+
+
 <body>
 </html>

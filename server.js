@@ -14,6 +14,7 @@ var express = require('express'),
 
 var db = require('./models'),
   Event = db.Event,
+  Rating = db.Rating,
   User = db.User;
 
 /*************
@@ -31,7 +32,18 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
+/*
+ * Ip Ware
+*/
 
+var getIp = require("ipware")().get_ip;
+
+app.use(function(req,res,next){
+
+  // get users ip address
+  req.userIp = getIp(req);
+  next();
+});
 
 app.use(cookieParser());
 app.use(session({
@@ -67,12 +79,58 @@ app.get("/profile", function (req, res) {
 });
 
 app.get("/events/:id", function(req, res) {
-  Event.findById(req.params.id, function (err, foundevent) {
-    if (err) {
+
+  Event.findById(req.params.id).populate("ratings").exec(function(err,event){
+    if(err){
       res.status(500).json({ error: err.message, });
-    } else {
-      res.render("events/show", { event: foundevent, });
     }
+    res.render("events/show", { event: event });
+  })
+
+  // Event.findById(req.params.id, function (err, foundevent) {
+  //   if (err) {
+  //     res.status(500).json({ error: err.message, });
+  //   } else {
+  //     res.render("events/show", { event: foundevent, });
+  //   }
+  // });
+});
+
+
+/*
+ * Rating
+*/
+app.post("/events/:id/rating",function(req,res){
+  // console.log("Score: " + req.body.score);
+
+  var id = req.params.id;
+
+  var data = {
+    score: req.body.score,
+    userAddress: req.userIp.clientIp,
+    event: id
+  }
+
+  Rating.create( data, function(err,rating){
+    if(err){
+      res.json({ error: "error" });
+    } else {
+
+      Event.findById(id).populate("ratings").exec(function(err, event){
+
+        event.ratings.push(rating._id);
+
+        event.save(function(err, saved_event){
+          if(err){
+            res.json({ error: "error" });
+          }
+
+          res.json({rating: rating, average: saved_event.average()});
+        })
+
+      })
+    }
+
   });
 });
 

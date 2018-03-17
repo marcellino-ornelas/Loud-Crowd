@@ -1,0 +1,46 @@
+.welcomeuser {
+  padding: 2em 0 0 2em;;
+  font-size: 1.5em;
+}
+
+.profileform {
+  padding-top: 2em;
+}
+
+.profileinput {
+  outline: .1em solid black;
+}
+
+.profileform div {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileform div input {
+  width: 48%;
+}
+
+.profilebutton {
+  width: 8em;
+  margin: 0 auto;
+  padding: .3em;
+  border: none;
+}
+
+.pastevents {
+  width: 90%;
+  margin: 0 auto;
+}
+
+th {
+  outline: .1em solid black;
+  padding: .7em 0;
+}
+
+.tablelabels th {
+  outline: .1em solid transparent;
+  font-size: 1.5em;
+  padding: 0;
+}

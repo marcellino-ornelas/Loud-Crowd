@@ -12,7 +12,7 @@ nav {
   justify-content: space-between;
   background-color: white;
   height: 3.2em;
-  padding-top: .9em;
+  align-items: center;
 }
 
 a {
@@ -21,6 +21,17 @@ a {
   padding: 0 1.5em 0 1.5em;
   font-size: 1.4em;
   font-weight: 700;
+}
+
+.navlogo {
+  margin: 0 auto;
+  font-family: Knewave;
+  font-size: 1.8em;
+  background-image: -webkit-linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
+  background-image: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
+  color:transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 h2 {
@@ -66,6 +77,10 @@ input {
 
   a {
       padding: 0 .7em 0 .7em;
+  }
+
+  .navlogo {
+    display: none;
   }
 
   .myform h2 {

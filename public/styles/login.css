@@ -2,12 +2,6 @@ body {
   background: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0)) no-repeat center center fixed;
 }
 
-.navlogo {
-  margin: 0 auto;
-  font-family: Knewave;
-  font-size: 1.8em;
-}
-
 .loginform {
   padding-top: 14em;
 }

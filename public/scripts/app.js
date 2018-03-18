@@ -19,39 +19,41 @@ $(function() {
   */
   var $slider = $("#slider");
   var $sliderValue = $("#sliderValue");
-  var $scoreUpdateBtn = $("#scoreUpdate");
-  var eventId = $scoreUpdateBtn.attr("data-event-id");
+  // var $scoreUpdateBtn = $("#scoreUpdate");
+  var $scoreValue = $("#score");
+  // var eventId = $scoreUpdateBtn.attr("data-event-id");
 
   // initialization
   $slider.slider({
     max: 20,
-    value: 10,
+    value: $scoreValue.val(),
     min: 1
   });
 
   $slider.on("slide", function(event,ui){
     var value = ui.value;
     $sliderValue.text("Score: " +value);
+    $scoreValue.val(value);
   });
 
-  $scoreUpdateBtn.on("click", function(event){
+  // $scoreUpdateBtn.on("click", function(event){
 
-    var data = {
-      score: $slider.slider("option", "value")
-    }
-    var ratingUrl = "/events/"+eventId+"/rating";
+  //   var data = {
+  //     score: $slider.slider("option", "value")
+  //   }
+  //   var ratingUrl = "/events/"+eventId+"/rating";
 
-    $.post( ratingUrl , data )
-      .done(function(data){
+  //   $.post( ratingUrl , data )
+  //     .done(function(data){
 
-        if(!data.error){
-          window.location.reload()
-        }
+  //       if(!data.error){
+  //         window.location.reload()
+  //       }
 
-        alert("there was a problem saving your data")
+  //       alert("there was a problem saving your data")
 
-      })
+  //     })
 
-  })
+  // })
 
 });

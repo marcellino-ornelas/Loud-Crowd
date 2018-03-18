@@ -35,12 +35,16 @@
   </div>
 
   <section>
-    <h3 id="sliderValue">Score: <%= event.score || 10 %></h3>
+    <h3 id="sliderValue">Score: <%= userRating.score || 10  %></h3>
     <div id="slider"></div>
-    <button type="button" id="scoreUpdate" data-event-id="<%= event._id %>"> Save </button>
+    <div>
+      <form method="POST" action="<%= formUrl  %><%= userRating && "?_method=PUT" %>" >
+        <input id="score" type="hidden" name="score" value="<%= userRating.score || 10  %>">
+        <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating")  %> </button>
+      </form>
+    </div>
+    <!-- <button type="button" id="scoreUpdate" data-event-id="<%= event._id %>"> Save </button> -->
   </section>
-
-
 
 <body>
 </html>

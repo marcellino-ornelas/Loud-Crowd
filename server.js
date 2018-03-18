@@ -5,6 +5,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
+    _ = require("lodash"),
+    middleware = require("./middleware"),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
 
@@ -36,14 +38,7 @@ app.use(methodOverride("_method"));
  * Ip Ware
 */
 
-var getIp = require("ipware")().get_ip;
-
-app.use(function(req,res,next){
-
-  // get users ip address
-  req.userIp = getIp(req);
-  next();
-});
+app.use("/events/:id", middleware.getIp );
 
 app.use(cookieParser());
 app.use(session({
@@ -60,7 +55,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-
 /**********
 * ROUTES *
 **********/
@@ -68,7 +62,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // HOMEPAGE ROUTE
 
-app.get("/profile", function (req, res) {
+app.get("/profile", middleware.isLoggedIn, function (req, res) {
   Event.find(function (err, allevents) {
     if (err) {
       res.status(500).json({ error: err.message, });
@@ -80,11 +74,28 @@ app.get("/profile", function (req, res) {
 
 app.get("/events/:id", function(req, res) {
 
+
   Event.findById(req.params.id).populate("ratings").exec(function(err,event){
     if(err){
-      res.status(500).json({ error: err.message, });
+      res.status(500).json({ error: err.message });
     }
-    res.render("events/show", { event: event });
+    var ip = req.userIp.clientIp;
+
+    var userRating = _.find(event.ratings, ["userAddress", ip ]);
+
+    var formUrl = "/events/"+event._id+"/rating";
+
+    if(userRating){
+      formUrl += "/"+userRating._id;
+    }
+
+
+    res.render("events/show", {
+      event: event,
+      userRating: userRating,
+      formUrl: formUrl
+    });
+
   })
 
   // Event.findById(req.params.id, function (err, foundevent) {
@@ -101,7 +112,6 @@ app.get("/events/:id", function(req, res) {
  * Rating
 */
 app.post("/events/:id/rating",function(req,res){
-  // console.log("Score: " + req.body.score);
 
   var id = req.params.id;
 
@@ -132,6 +142,22 @@ app.post("/events/:id/rating",function(req,res){
     }
 
   });
+});
+
+app.put("/events/:id/rating/:rating_id",function(req,res){
+  console.log("Score: " + req.body.score);
+
+  var data = { score: req.body.score };
+
+  Rating.findByIdAndUpdate(req.params.rating_id, data )
+    .exec(function(err,rating){
+
+      if(err || !rating){
+        console.log(err);
+      }
+
+      res.redirect("/events/"+req.params.id);
+    });
 });
 
 app.post("/events", function(req, res) {

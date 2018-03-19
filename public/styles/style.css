@@ -104,65 +104,66 @@ a, button, .logo-content, i{
 /*
  * Classes
 */
+
 .no-flow{
   overflow: hidden;
 }
 
 .section{
-  padding-top:20px;
-  padding-bottom:20px;
+  padding-top: 2em;
+  padding-bottom: 2em;
 }
 
-.space{
-  padding-left: 10px;
-  padding-right: 10px;
+.space {
+  padding: .5em;
 }
 
 .container{
-  width:85%;
+  width: 85%;
   margin: auto;
 }
 
-.fx{
+.fx {
   display: flex;
-  flex-direction: row;
+  align-items: center;
 }
 
-.fx-grow{
+.fx-grow {
   flex-grow:1;
   flex-shrink: 1;
-
 }
 
 /* navbar */
 .navbar{
-  font-size: 20px;
   background-color: white;
-  font-weight: 600;
 }
 
-.nav-bars,
-.nav-logo{
-  font-size: 1.5em;
+.navlogo {
+  margin: 0 auto;
+  font-family: Knewave;
+  font-size: 2em;
+  background-image: -webkit-linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
+  background-image: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
+  background-repeat: repeat;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding: 1em;
 }
 
 .nav-links{
   display: flex;
-  flex:1 0;
+  flex: 1 0;
 }
 
 .nav-links > .nav-link{
   flex: 1 1 auto;
 }
 
-.nav-link > a{
-  font-size: 1.3em;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.nav-bars{
+.nav-bars {
   display: none;
+  font-size: 2em;
+  padding-left: .3em;
 }
 
 .logo-content{

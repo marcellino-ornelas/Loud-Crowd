@@ -6,7 +6,7 @@ $(function() {
   // var output = document.getElementById("demo") || {};
   // output.innerHTML = slider.value; // Display the default slider value
   var $body = $(document.body);
-
+  // $("body").css("background-color", `rgb(${red}, 0, ${blue})`);
   /*
    * Navigation Bar
   */
@@ -19,11 +19,22 @@ $(function() {
     // toggle side nav when in mobile
     var displayIsOn = $navContent.is(":hidden");
 
+
+  // var slider = document.getElementById("myRange");
+  // var output = document.getElementById("demo");
+  // output.innerHTML = slider.value; // Display the default slider value
+  //
+  // // Update the current slider value (each time you drag the slider handle)
+  // slider.oninput = function() {
+  //     output.innerHTML = this.value;
+  // }
+
     $navContent.toggleClass("show",displayIsOn);
     $overlay.toggleClass("show",displayIsOn);
     $body.toggleClass("no-flow", displayIsOn);
 
   }
+
 
   $sideNavButton.on("click", activateSideNav );
 
@@ -48,7 +59,7 @@ $(function() {
 
   // initialization
   $.fn.slider && $slider.slider({
-    max: 20,
+    max: 255,
     min: 1,
     value: $scoreValue.val()
   });

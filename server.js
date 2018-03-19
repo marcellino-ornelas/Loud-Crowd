@@ -93,8 +93,7 @@ app.get("/events/:id", function(req, res) {
     if(err){
       res.status(500).json({ error: err.message });
     }
-    // var ip = req.userIp.clientIp;
-
+    
     if( !event ){
       res.redirect("/profile");
     }
@@ -137,6 +136,7 @@ app.post("/events/:id/rating",function(req,res){
 
   Rating.create( data, function(err,rating){
     if(err){
+      console.log(err)
       res.json({ error: "error" });
     } else {
 
@@ -151,7 +151,7 @@ app.post("/events/:id/rating",function(req,res){
             res.json({ error: "error" });
           }
 
-          res.redirect("/events/"+id);
+          res.redirect("/events/" + id);
         });
 
       });

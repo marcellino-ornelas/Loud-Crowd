@@ -1,16 +1,11 @@
 $(function() {
-  // $("#menu, #topnav").on("click", function() {
-  //   $("#topnav").toggle();
-  // });
 
-  // var output = document.getElementById("demo") || {};
-  // output.innerHTML = slider.value; // Display the default slider value
   var $body = $(document.body);
-  // $("body").css("background-color", `rgb(${red}, 0, ${blue})`);
+  // $body.css("background-color", `rgb(${red}, 0, ${blue})`);
+
   /*
    * Navigation Bar
   */
-
   var $sideNavButton = $(".nav-bars > .fa-bars");
   var $navContent = $(".nav-links");
   var $overlay = $("#overlay");
@@ -19,22 +14,11 @@ $(function() {
     // toggle side nav when in mobile
     var displayIsOn = $navContent.is(":hidden");
 
-
-  // var slider = document.getElementById("myRange");
-  // var output = document.getElementById("demo");
-  // output.innerHTML = slider.value; // Display the default slider value
-  //
-  // // Update the current slider value (each time you drag the slider handle)
-  // slider.oninput = function() {
-  //     output.innerHTML = this.value;
-  // }
-
     $navContent.toggleClass("show",displayIsOn);
     $overlay.toggleClass("show",displayIsOn);
     $body.toggleClass("no-flow", displayIsOn);
 
   }
-
 
   $sideNavButton.on("click", activateSideNav );
 
@@ -52,10 +36,16 @@ $(function() {
    *
   */
   var $slider = $("#slider");
-  var $sliderValue = $("#sliderValue");
-  // var $scoreUpdateBtn = $("#scoreUpdate");
   var $scoreValue = $("#score");
-  // var eventId = $scoreUpdateBtn.attr("data-event-id");
+  var $average = $("#average");
+  // var $rate = $("#rate");
+
+  // $rate.on("submit", function(e){
+  //   e.preventDefault();
+  //   $this = $(this);
+  //   // this.submit();
+
+  // })
 
   // initialization
   $.fn.slider && $slider.slider({
@@ -64,10 +54,47 @@ $(function() {
     value: $scoreValue.val()
   });
 
-  $slider.on("slide", function(event, ui){
-    var value = ui.value;
-    $sliderValue.text("Score: " + value);
-    $scoreValue.val(value);
+  // $slider.on("slide", function(event, ui){
+  //   var value = ui.value;
+  //   $scoreValue.val(value);
+  // });
+
+  $slider.on("slidestop", function(event){
+    $.ajax({
+      url: formUrl,
+      method: method,
+      data: { score: $slider.slider("option","value") },
+      success: function(data){
+        if(method === "POST" && data.rating){
+          method = "PUT";
+          formUrl += "/"+data.rating._id;
+        }
+      },
+      error: console.log
+    })
   });
+
+  /*
+   * Socket.io
+  */
+
+  if( $slider.length > 0){
+    var socket = io.connect('https://crowd-engagement.herokuapp.com');
+
+    socket.on('connection', function() {
+      console.log("connection established");
+    });
+
+    socket.on("average", updateAverage );
+  }
+
+  function updateAverage(data){
+    $average.text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10");
+
+    var red = data;
+    var blue = 255 - red;
+
+    $body.css("background-color", `rbg(${red}, 0, ${blue})`)
+  }
 
 });

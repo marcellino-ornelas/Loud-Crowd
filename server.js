@@ -21,12 +21,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function (socket) {
-  socket.emit('news', "connection established");
-
-  // socket.on('my other event', function (data) {
-  //   console.log(data);
-  // })
-
+  console.log("connection established");
 })
 
 
@@ -119,7 +114,7 @@ app.get("/events/:id", function(req, res) {
       formUrl += "/"+userRating._id;
     }
 
-    io.emit("average", event.average());
+    // io.emit("average", event.average());
 
     res.render("events/show", {
       event: event,
@@ -136,7 +131,7 @@ app.get("/events/:id", function(req, res) {
 */
 app.post("/events/:id/rating",function(req,res){
 
-
+  console.log(req.cookies.voteId)
   var id = req.params.id;
 
   var data = {
@@ -150,19 +145,25 @@ app.post("/events/:id/rating",function(req,res){
       res.json({ error: err });
     } else {
 
-      res.cookie("voteId", rating._id );
+      Event.findById(id).exec(function(err, oldEvent){
 
-      Event.findById(id).populate("ratings").exec(function(err, event){
+        oldEvent.ratings.push(rating._id);
 
-        event.ratings.push(rating._id);
-
-        event.save(function(err, saved_event){
+        oldEvent.save(function(err, saved_event){
           if(err){
-            res.json({ error: "error" });
+            res.json({ error: err });
           }
 
-          // io.emit("average", event.average() );
-          res.redirect("/events/" + id);
+          Event.populate( saved_event, { path: "ratings"}, function(err, newEvent){
+            if(err){
+              res.status(500).json(err);
+            }
+            var average = newEvent.average();
+
+            res.cookie("voteId", rating._id );
+            io.emit("average", average );
+            res.json({average: average, rating: rating});
+          })
         });
 
       });
@@ -172,7 +173,6 @@ app.post("/events/:id/rating",function(req,res){
 });
 
 app.put("/events/:id/rating/:rating_id",function(req,res){
-  console.log("Score: " + req.body.score);
 
   var data = { score: req.body.score };
 
@@ -180,12 +180,17 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
     .exec(function(err,rating){
 
       if(err || !rating){
-        console.log(err);
-        res.cookie("voteId", rating._id)
+        res.status(500).json({error: err, rating: rating })
       }
-      res.cookie("voteId", rating._id)
-      // io.emit("average", .average() );
-      res.redirect("/events/"+req.params.id);
+
+      Event.findById(rating.event).populate("ratings").exec(function(err, event){
+        var average = event.average();
+
+        res.cookie("voteId", rating._id);
+        io.emit("average", average );
+        res.json({ average: average});
+      })
+
     });
 });
 
@@ -290,9 +295,9 @@ app.post('/', middleware.denySignedIn ,function(req, res) {
       res.status(400)
     } else {
       passport.authenticate('local')(req, res, function() {
-      res.redirect('/profile');
-    });
-  }
+        res.redirect('/profile');
+      });
+    }
   });
 });
 

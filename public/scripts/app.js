@@ -6,7 +6,7 @@ $(function() {
   // var output = document.getElementById("demo") || {};
   // output.innerHTML = slider.value; // Display the default slider value
   var $body = $(document.body);
-
+  // $("body").css("background-color", `rgb(${red}, 0, ${blue})`);
   /*
    * Navigation Bar
   */
@@ -59,7 +59,7 @@ $(function() {
 
   // initialization
   $.fn.slider && $slider.slider({
-    max: 20,
+    max: 255,
     min: 1,
     value: $scoreValue.val()
   });

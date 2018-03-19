@@ -90,6 +90,7 @@ app.get("/events/:id", function(req, res) {
     var ip = req.userIp.clientIp;
 
     var userRating = _.find(event.ratings, ["userAddress", ip ]);
+    console.log(userRating)
 
     var formUrl = "/events/"+event._id+"/rating";
 
@@ -131,6 +132,7 @@ app.post("/events/:id/rating",function(req,res){
 
   Rating.create( data, function(err,rating){
     if(err){
+      console.log(err)
       res.json({ error: "error" });
     } else {
 

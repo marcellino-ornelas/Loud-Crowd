@@ -42,6 +42,10 @@ span.ui-slider-handle.ui-corner-all.ui-state-default {
   font-size: 1.3em;
 }
 
+.eventpageslider div.section {
+  padding: 1em 0;
+}
+
 button.button {
   border: none;
   padding: .5em;

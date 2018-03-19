@@ -66,7 +66,7 @@ $(function() {
 
   $slider.on("slide", function(event,ui){
     var value = ui.value;
-    $sliderValue.text("Score: " +value);
+    $sliderValue.text("Score: " + value);
     $scoreValue.val(value);
   });
 

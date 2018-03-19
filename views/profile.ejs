@@ -3,24 +3,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <!-- set viewport to device width to make site responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Knewave|Varela+Round" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <%- include partials/head  %>
 
-  <!-- custom styles -->
-  <link rel="stylesheet" type="text/css" href="/styles/style.css">
+  <!-- all page specific styles go here -->
+  <title>Loud Crowd</title>
   <link rel="stylesheet" type="text/css" href="/styles/profile.css">
 
-  <!-- jquery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-  <title>Loud Crowd</title>
 </head>
 <body>
-  <nav>
+  <!-- <nav>
     <a href="/about">about</a>
     <% if(!user) { %>
     <a href="/login">log in</a>
@@ -28,7 +20,9 @@
     <% } else { %>
     <a href="/" class="navlogo">loud crowd</a>
     <a href="/logout">Log out</a>
-  </nav>
+  </nav> -->
+
+  <%- include partials/nav  %>
 
   <div class="welcomeuser">Welcome, <%= user.username %>!</div>
   <% } %>
@@ -57,7 +51,7 @@
         <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
         <th>Author: <%= event.owner %> </th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
-        <th><%= event.rating %></th>
+        <th><%= event.average() %></th>
 
 
           <!-- pencil icon to toggle update form -->

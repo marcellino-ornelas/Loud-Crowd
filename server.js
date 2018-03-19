@@ -5,6 +5,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
+    _ = require("lodash"),
+    middleware = require("./middleware"),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
 
@@ -14,6 +16,7 @@ var express = require('express'),
 
 var db = require('./models'),
   Event = db.Event,
+  Rating = db.Rating,
   User = db.User;
 
 /*************
@@ -31,6 +34,10 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
+/*
+ * Ip Ware
+*/
+app.use("/events/:id", middleware.getIp );
 
 
 app.use(cookieParser());
@@ -47,6 +54,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// assign signed in user to locals for template use
+app.use(function(req,res,next){
+  res.locals.user = req.user || null;
+  next();
+});
 
 
 /**********
@@ -56,24 +68,104 @@ passport.deserializeUser(User.deserializeUser());
 
 // HOMEPAGE ROUTE
 
-app.get("/profile", function (req, res) {
-  Event.find(function (err, allevents) {
+app.get("/profile", middleware.isLoggedIn, function (req, res) {
+
+  Event.find({}).populate("ratings").exec(function (err, allevents) {
     if (err) {
-      res.status(500).json({ error: err.message, });
+      res.status(500).json({ error: err.message });
     } else {
-      res.render("profile", { events: allevents, user: req.user, });
+      res.render("profile", { events: allevents, user: req.user });
     }
   });
+
 });
 
 app.get("/events/:id", function(req, res) {
-  Event.findById(req.params.id, function (err, foundevent) {
-    if (err) {
-      res.status(500).json({ error: err.message, });
-    } else {
-      res.render("events/show", { event: foundevent, });
+
+
+  Event.findById(req.params.id).populate("ratings").exec(function(err,event){
+    if(err){
+      res.status(500).json({ error: err.message });
     }
+    var ip = req.userIp.clientIp;
+
+    var userRating = _.find(event.ratings, ["userAddress", ip ]);
+
+    var formUrl = "/events/"+event._id+"/rating";
+
+    if(userRating){
+      formUrl += "/"+userRating._id;
+    }
+
+
+    res.render("events/show", {
+      event: event,
+      userRating: userRating,
+      formUrl: formUrl
+    });
+
+  })
+
+  // Event.findById(req.params.id, function (err, foundevent) {
+  //   if (err) {
+  //     res.status(500).json({ error: err.message, });
+  //   } else {
+  //     res.render("events/show", { event: foundevent, });
+  //   }
+  // });
+});
+
+
+/*
+ * Rating
+*/
+app.post("/events/:id/rating",function(req,res){
+
+  var id = req.params.id;
+
+  var data = {
+    score: req.body.score,
+    userAddress: req.userIp.clientIp,
+    event: id
+  }
+
+  Rating.create( data, function(err,rating){
+    if(err){
+      res.json({ error: "error" });
+    } else {
+
+      Event.findById(id).populate("ratings").exec(function(err, event){
+
+        event.ratings.push(rating._id);
+
+        event.save(function(err, saved_event){
+          if(err){
+            res.json({ error: "error" });
+          }
+
+          res.json({rating: rating, average: saved_event.average()});
+        })
+
+      })
+    }
+
   });
+});
+
+app.put("/events/:id/rating/:rating_id",function(req,res){
+  console.log("Score: " + req.body.score);
+
+  var data = { score: req.body.score };
+
+  Rating.findByIdAndUpdate(req.params.rating_id, data )
+    .exec(function(err,rating){
+
+      if(err || !rating){
+        console.log(err);
+      }
+
+      res.redirect("/events/"+req.params.id);
+    });
 });
 
 app.post("/events", function(req, res) {
@@ -145,13 +237,13 @@ app.delete("/events/:id", function (req, res) {
 // AUTH ROUTES
 
 // show landingpage view
-app.get('/', function(req, res) {
+app.get('/', middleware.denySignedIn, function(req, res) {
   res.render('landingpage', { user: req.user, });
 });
 
 // sign up new user, then log them in
-//hashes and salts password, saves new yser to db
-app.post('/', function(req, res) {
+//hashes and salts password, saves new user to db
+app.post('/', middleware.denySignedIn ,function(req, res) {
   User.register(new User(req.body), req.body.password, function(err, newUser) {
     if (err) {
       console.log("Error!!!" + err)
@@ -165,11 +257,11 @@ app.post('/', function(req, res) {
 });
 
 // show login view
-app.get('/login', function (req, res) {
+app.get('/login', middleware.denySignedIn, function (req, res) {
  res.render('login');
 });
 
-app.post('/login', passport.authenticate('local'), function(req, res) {
+app.post('/login',middleware.denySignedIn, passport.authenticate('local'), function(req, res) {
   console.log(req.user);
   res.redirect('/profile');
 });

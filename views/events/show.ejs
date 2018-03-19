@@ -51,7 +51,7 @@
     <!-- connection to socket.IO -->
     <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io.connect('http://10.1.7.180:3000');
+    var socket = io.connect('https://crowd-engagement.herokuapp.com/');
     socket.on('news', function (data) {
       console.log(data);
       socket.emit('my other event', { my: 'data' });

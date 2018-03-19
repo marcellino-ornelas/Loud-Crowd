@@ -3,19 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <!-- set viewport to device width to make site responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%- include ../partials/head %>
 
-  <!-- fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Knewave|Varela+Round" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-  <!-- custom styles -->
-  <link rel="stylesheet" type="text/css" href="/styles/style.css">
   <link rel="stylesheet" type="text/css" href="/styles/show.css">
-  <!-- jquery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
@@ -23,18 +15,16 @@
   <title>Loud Crowd</title>
 </head>
 <body>
+  <% include ../partials/nav %>
+
+
   <h1><%= event.eventName %></h1>
 
-  <!-- <div class="slidecontainer">
-  	<input type="range" min="1" max="20" value="10" class="slider" id="myRange">
-  	<p>Value: <span id="demo"></span></p>
-  </div> -->
-
   <div>
-    <h1 id="average"> Overall Score: <%= event.average() %></h1>
   </div>
 
   <section>
+    <h3 id="average"> Average Score: <%= event.average() %></h3>
     <h3 id="sliderValue">Score: <%= userRating.score || 10  %></h3>
     <div id="slider"></div>
     <div>

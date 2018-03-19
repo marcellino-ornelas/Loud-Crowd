@@ -37,8 +37,8 @@ app.use(methodOverride("_method"));
 /*
  * Ip Ware
 */
-
 app.use("/events/:id", middleware.getIp );
+
 
 app.use(cookieParser());
 app.use(session({
@@ -54,6 +54,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req,res,next){
+  res.locals.user = req.user || null;
+  next();
+});
 
 /**********
 * ROUTES *

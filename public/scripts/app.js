@@ -1,8 +1,33 @@
 $(function() {
 
+  var $sideNavButton = $(".nav-bars > .fa-bars");
+  var $navContent = $(".nav-links");
+  var $overlay = $("#overlay");
+
   $("#menu, #topnav").on("click", function() {
     $("#topnav").toggle();
   });
+
+  var activateSideNav = function(event){
+    // toggle side nav when in mobile
+    console.log("hit side nav");
+    var displayIsOn = $navContent.is(":hidden");
+
+    $navContent.toggleClass("show",displayIsOn);
+    $overlay.toggleClass("show",displayIsOn);
+  }
+
+  $sideNavButton.on("click", activateSideNav );
+
+  $overlay.on("click",function(event){
+    // return if side nav isnt open
+    if($navContent.is(":hidden")){ return; }
+
+    // toggle side nav
+    activateSideNav();
+
+  });
+
 
   // var slider = document.getElementById("myRange") || {};
   var output = document.getElementById("demo") || {};

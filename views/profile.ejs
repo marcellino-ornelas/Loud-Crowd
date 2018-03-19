@@ -32,7 +32,6 @@
   <table class="pastevents" id="">
     <tr class="tablelabels">
       <th>Event Name</th>
-      <th>Author</th>
       <th>Scale</th>
       <th>Score</th>
       <th>Delete</th>
@@ -40,7 +39,6 @@
     <% for (let event of events) { %>
       <tr class="" data-id="<%= event._id %>">
         <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
-        <th>Author: <%= event.owner %> </th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
         <th><%= event.average() %></th>
 

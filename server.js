@@ -143,7 +143,7 @@ app.post("/events/:id/rating",function(req,res){
             res.json({ error: "error" });
           }
 
-          res.json({rating: rating, average: saved_event.average()});
+          res.redirect("/events/" + id);
         })
 
       })

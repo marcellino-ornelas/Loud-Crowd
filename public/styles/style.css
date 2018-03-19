@@ -109,18 +109,12 @@ a, button, .logo-content, i{
   overflow: hidden;
 }
 
-.section{
-  padding-top: 2em;
-  padding-bottom: 2em;
+.section {
+  padding: 2em 0;
 }
 
 .space {
   padding: .5em;
-}
-
-.container{
-  width: 85%;
-  margin: auto;
 }
 
 .fx {

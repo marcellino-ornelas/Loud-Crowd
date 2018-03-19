@@ -79,6 +79,10 @@ app.get("/profile", middleware.isLoggedIn, function (req, res) {
 
 });
 
+app.get("/about", function (req, res) {
+  res.render("about");
+});
+
 app.get("/events/:id", function(req, res) {
 
   Event.findById(req.params.id).populate("ratings").exec(function(err,event){

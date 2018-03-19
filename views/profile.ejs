@@ -12,20 +12,12 @@
 
 </head>
 <body>
-  <!-- <nav>
-    <a href="/about">about</a>
-    <% if(!user) { %>
-    <a href="/login">log in</a>
-    <a href="/">sign up</a>
-    <% } else { %>
-    <a href="/" class="navlogo">loud crowd</a>
-    <a href="/logout">Log out</a>
-  </nav> -->
+
 
   <%- include partials/nav  %>
 
   <div class="welcomeuser">Welcome, <%= user.username %>!</div>
-  
+
   <div class="myform profileform">
     <h2>add an event</h2>
     <form method="POST" action="/events">
@@ -59,10 +51,10 @@
             <button class="button profilebutton">update</button>
           </a></th> -->
 
-          <!-- trash can icon to delete post -->
-          <th><form action="/events/<%= event._id %>?_method=DELETE" method="POST">
-            <button class="button profilebutton">delete</button>
-          </form></th>
+        <!-- trash can icon to delete post -->
+        <th><form action="/events/<%= event._id %>?_method=DELETE" method="POST">
+          <button class="button profilebutton">delete</button>
+        </form></th>
 
         <!-- form to update post -->
         <!-- <th><form action="/events/<%= event._id %>?_method=PUT" method="POST" id="update-<%= event._id %>" class="myform profileform">

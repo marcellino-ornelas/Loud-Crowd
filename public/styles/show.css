@@ -1,4 +1,7 @@
-
-
-
-
+.eventpagetitle {
+  text-align: center;
+  color: white;
+  font-family: knewave;
+  font-size: 3em;
+  padding: 3em;
+}

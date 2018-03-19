@@ -1,14 +1,34 @@
 // require express and other modules
 var express = require('express'),
     app = express(),
+    http = require("http"),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     _ = require("lodash"),
+    socket = require("socket.io"),
     middleware = require("./middleware"),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
+
+
+var server = http.createServer(app);
+var io = socket(server);
+
+app.get('/', function(req, res){
+  res.sendfile(__dirname, + 'index/html');
+});
+
+io.on('connection', function (socket) {
+  socket.emit('news', "connection established");
+
+  // socket.on('my other event', function (data) {
+  //   console.log(data);
+  // })
+
+})
+
 
 /************
 * DATABASE *
@@ -66,6 +86,7 @@ app.use(function(req,res,next){
 **********/
 
 
+
 // HOMEPAGE ROUTE
 
 app.get("/profile", middleware.isLoggedIn, function (req, res) {
@@ -87,9 +108,14 @@ app.get("/events/:id", function(req, res) {
     if(err){
       res.status(500).json({ error: err.message });
     }
-    var ip = req.userIp.clientIp;
+    
+    if( !event ){
+      res.redirect("/profile");
+    }
 
-    var userRating = _.find(event.ratings, ["userAddress", ip ]);
+    var userRating = req.cookies.voteId && _.find(event.ratings, function(item){
+      return item._id.toString() === req.cookies.voteId;
+    });
 
     var formUrl = "/events/"+event._id+"/rating";
 
@@ -97,6 +123,7 @@ app.get("/events/:id", function(req, res) {
       formUrl += "/"+userRating._id;
     }
 
+    io.emit("average", event.average());
 
     res.render("events/show", {
       event: event,
@@ -104,15 +131,7 @@ app.get("/events/:id", function(req, res) {
       formUrl: formUrl
     });
 
-  })
-
-  // Event.findById(req.params.id, function (err, foundevent) {
-  //   if (err) {
-  //     res.status(500).json({ error: err.message, });
-  //   } else {
-  //     res.render("events/show", { event: foundevent, });
-  //   }
-  // });
+  });
 });
 
 
@@ -121,18 +140,24 @@ app.get("/events/:id", function(req, res) {
 */
 app.post("/events/:id/rating",function(req,res){
 
+
   var id = req.params.id;
 
   var data = {
     score: req.body.score,
-    userAddress: req.userIp.clientIp,
+    // userAddress: req.userIp.clientIp,
     event: id
   }
 
+
+
   Rating.create( data, function(err,rating){
     if(err){
+      console.log(err)
       res.json({ error: "error" });
     } else {
+
+      res.cookie("voteId", rating._id );
 
       Event.findById(id).populate("ratings").exec(function(err, event){
 
@@ -143,10 +168,11 @@ app.post("/events/:id/rating",function(req,res){
             res.json({ error: "error" });
           }
 
-          res.json({rating: rating, average: saved_event.average()});
-        })
+          // io.emit("average", event.average() );
+          res.redirect("/events/" + id);
+        });
 
-      })
+      });
     }
 
   });
@@ -163,7 +189,8 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
       if(err || !rating){
         console.log(err);
       }
-
+      res.cookie("voteId", rating._id)
+      // io.emit("average", .average() );
       res.redirect("/events/"+req.params.id);
     });
 });
@@ -385,6 +412,6 @@ app.delete("/api/events/:id", function (req, res) {
  **********/
 
 // listen on the port that Heroku prescribes (process.env.PORT) OR port 3000
-app.listen(process.env.PORT || 3000, function () {
+server.listen(process.env.PORT || 3000, function () {
   console.log('Express server is up and running on http://localhost:3000/');
 });

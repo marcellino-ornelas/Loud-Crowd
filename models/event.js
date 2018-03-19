@@ -16,7 +16,7 @@ EventSchema.methods.average = function () {
 
     var score = (nextValue || {}).score || 0
 
-    return acc + parseInt( score ,10);
+    return acc + parseInt( score , 10);
   }, 0);
 
   return (finalScore / this.ratings.length) || 1

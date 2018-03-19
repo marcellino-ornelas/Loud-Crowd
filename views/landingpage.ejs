@@ -10,19 +10,6 @@
 
 </head>
 <body id="body">
-  <!-- <nav id="topnav">
-    <div>
-      <a href="/about">about</a>
-    <% if(!user) { %>
-      <a href="/">sign up</a>
-    </div>
-    <div>
-      <a href="/login">log in</a>
-      <% } else { %>
-      <a href="/logout">Log out</a>
-    </div>
-    <% } %>
-  </nav> -->
 
   <%- include partials/nav %>
 
@@ -33,7 +20,7 @@
     <form method="POST" action="/">
       <input type="text" name="username" class="" placeholder="Username">
       <input type="password" name="password" class="" placeholder="Password">
-      <input type="submit" placeholder="sign up" class="button">
+      <input type="submit" value="sign up" class="button">
     </form>
   </div>
 

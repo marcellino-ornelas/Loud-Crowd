@@ -6,7 +6,7 @@ var EventSchema = new Schema({
   ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
   lowScore: String,
   highScore: String,
-  owner: String
+  owner: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 EventSchema.methods.average = function () {

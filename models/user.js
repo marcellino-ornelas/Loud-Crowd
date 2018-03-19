@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   name: String,
   username: String,
+  events: [{ type: Schema.Types.ObjectId, ref: 'Rating' }]
 });
 
 UserSchema.plugin(passportLocalMongoose);

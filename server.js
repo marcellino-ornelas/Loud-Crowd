@@ -39,18 +39,14 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
-/*
- * Ip Ware
-*/
-app.use("/events/:id", middleware.getIp );
-
-
 app.use(cookieParser());
+
 app.use(session({
   secret: 'whereismarcellino',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -70,17 +66,14 @@ app.use(function(req,res,next){
 * ROUTES *
 **********/
 
-
-
 // HOMEPAGE ROUTE
-
 app.get("/profile", middleware.isLoggedIn, function (req, res) {
 
-  Event.find({}).populate("ratings").exec(function (err, allevents) {
+  Event.find({ owner: req.user._id }).populate("ratings").exec(function (err, allevents) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.render("profile", { events: allevents, user: req.user });
+      res.render("profile", { events: allevents});
     }
   });
 
@@ -91,7 +84,6 @@ app.get("/about", function (req, res) {
 });
 
 app.get("/events/:id", function(req, res) {
-
 
   Event.findById(req.params.id).populate("ratings").exec(function(err,event){
     if(err){
@@ -112,7 +104,6 @@ app.get("/events/:id", function(req, res) {
       formUrl += "/"+userRating._id;
     }
 
-
     res.render("events/show", {
       event: event,
       userRating: userRating,
@@ -132,11 +123,8 @@ app.post("/events/:id/rating",function(req,res){
 
   var data = {
     score: req.body.score,
-    // userAddress: req.userIp.clientIp,
     event: id
   }
-
-
 
   Rating.create( data, function(err,rating){
     if(err){
@@ -174,8 +162,8 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
 
       if(err || !rating){
         console.log(err);
+        res.cookie("voteId", rating._id)
       }
-      res.cookie("voteId", rating._id)
 
       res.redirect("/events/"+req.params.id);
     });
@@ -189,11 +177,18 @@ app.post("/events", function(req, res) {
   }
 
   // save new event in db
-  newevent.save(function (err) {
+  newevent.save(function (err,event) {
     if (err) {
       res.status(500).json({ error: err.message, });
     } else {
-      res.redirect("/profile");
+      req.user.events.push(event._id);
+
+      req.user.save(function(err){
+        if(err){
+          console.log(err)
+        }
+        res.redirect("/profile");
+      })
     }
   });
 });
@@ -241,8 +236,20 @@ app.delete("/events/:id", function (req, res) {
   var eventId = req.params.id;
 
   // find event in db by id and remove
-  Event.findOneAndRemove({ _id: eventId, }, function () {
-    res.redirect("/profile");
+  Event.findOneAndRemove({ _id: eventId, }, function (err, event) {
+
+    if( err ){
+      res.json({error: err});
+      res.redirect("/profile");
+    }
+
+    Rating.remove({ event: event._id}).exec(function(err){
+      if( err ){
+        res.json({error: err})
+      };
+      res.redirect("/profile");
+    })
+
   });
 });
 

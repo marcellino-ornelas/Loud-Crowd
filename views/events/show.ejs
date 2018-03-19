@@ -33,16 +33,15 @@
 
   <div class="container">
     <h1 class="eventpagetitle"><%= event.eventName %></h1>
+    <% var average = event.average() * 10 / 255 %>
+    <h2 id="average"> Average Score: <%=average.toFixed(2)%> out of 10 </h2>
 
-    <section>
-      <h3 id="average"> Average Score: <%= event.average() %> </h3>
-
-      <h3 id="sliderValue"> Score: <%= (userRating || {}).score || 10 %> </h3>
-
+    <section class="eventpageslider">
       <div id="slider"></div>
       <div class="section">
         <form method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
           <input id="score" type="hidden" name="score" value="<%= (userRating || {}).score || 10 %>" />
+          <div class="sliderrating"><p><%= event.lowScore %></p><p><%= event.highScore %></p></div>
           <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating") %> </button>
         </form>
       </div>

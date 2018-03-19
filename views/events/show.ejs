@@ -29,7 +29,6 @@
     </script>
 
 
-
   <%- include ../partials/nav %>
 
   <div class="container">
@@ -48,6 +47,23 @@
       </div>
     </section>
   </div>
+
+    <!-- connection to socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://10.1.7.180:3000');
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+    });
+
+    socket.on("average", function(data){
+      console.log("average: ", data);
+      $("#average").text("Average Score: " + data);
+    })
+  </script>
+
+
 
 <body>
 </html>

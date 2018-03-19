@@ -14,6 +14,21 @@ var express = require('express'),
 
 
 var server = http.createServer(app);
+var io = socket(server);
+
+app.get('/', function(req, res){
+  res.sendfile(__dirname, + 'index/html');
+});
+
+io.on('connection', function (socket) {
+  socket.emit('news', "connection established");
+
+  // socket.on('my other event', function (data) {
+  //   console.log(data);
+  // })
+
+})
+
 
 /************
 * DATABASE *
@@ -104,6 +119,8 @@ app.get("/events/:id", function(req, res) {
       formUrl += "/"+userRating._id;
     }
 
+    io.emit("average", event.average());
+
     res.render("events/show", {
       event: event,
       userRating: userRating,
@@ -118,6 +135,7 @@ app.get("/events/:id", function(req, res) {
  * Rating
 */
 app.post("/events/:id/rating",function(req,res){
+
 
   var id = req.params.id;
 
@@ -143,6 +161,7 @@ app.post("/events/:id/rating",function(req,res){
             res.json({ error: "error" });
           }
 
+          // io.emit("average", event.average() );
           res.redirect("/events/" + id);
         });
 
@@ -164,7 +183,8 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
         console.log(err);
         res.cookie("voteId", rating._id)
       }
-
+      res.cookie("voteId", rating._id)
+      // io.emit("average", .average() );
       res.redirect("/events/"+req.params.id);
     });
 });

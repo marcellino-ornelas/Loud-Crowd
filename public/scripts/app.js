@@ -1,20 +1,28 @@
 $(function() {
+  // $("#menu, #topnav").on("click", function() {
+  //   $("#topnav").toggle();
+  // });
+
+  // var output = document.getElementById("demo") || {};
+  // output.innerHTML = slider.value; // Display the default slider value
+  var $body = $(document.body);
+
+  /*
+   * Navigation Bar
+  */
 
   var $sideNavButton = $(".nav-bars > .fa-bars");
   var $navContent = $(".nav-links");
   var $overlay = $("#overlay");
 
-  $("#menu, #topnav").on("click", function() {
-    $("#topnav").toggle();
-  });
-
   var activateSideNav = function(event){
     // toggle side nav when in mobile
-    console.log("hit side nav");
     var displayIsOn = $navContent.is(":hidden");
 
     $navContent.toggleClass("show",displayIsOn);
     $overlay.toggleClass("show",displayIsOn);
+    $body.toggleClass("no-flow", displayIsOn);
+
   }
 
   $sideNavButton.on("click", activateSideNav );
@@ -28,16 +36,6 @@ $(function() {
 
   });
 
-
-  // var slider = document.getElementById("myRange") || {};
-  var output = document.getElementById("demo") || {};
-  // output.innerHTML = slider.value; // Display the default slider value
-
-  // Update the current slider value (each time you drag the slider handle)
-  slider.oninput = function() {
-      output.innerHTML = this.value;
-  }
-
   /*
    * Slider
    *
@@ -49,10 +47,10 @@ $(function() {
   // var eventId = $scoreUpdateBtn.attr("data-event-id");
 
   // initialization
-  $slider.slider({
+  $.fn.slider && $slider.slider({
     max: 20,
-    value: $scoreValue.val(),
-    min: 1
+    min: 1,
+    value: $scoreValue.val()
   });
 
   $slider.on("slide", function(event,ui){
@@ -60,25 +58,5 @@ $(function() {
     $sliderValue.text("Score: " +value);
     $scoreValue.val(value);
   });
-
-  // $scoreUpdateBtn.on("click", function(event){
-
-  //   var data = {
-  //     score: $slider.slider("option", "value")
-  //   }
-  //   var ratingUrl = "/events/"+eventId+"/rating";
-
-  //   $.post( ratingUrl , data )
-  //     .done(function(data){
-
-  //       if(!data.error){
-  //         window.location.reload()
-  //       }
-
-  //       alert("there was a problem saving your data")
-
-  //     })
-
-  // })
 
 });

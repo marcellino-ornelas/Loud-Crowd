@@ -54,10 +54,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// assign signed in user to locals for template use
 app.use(function(req,res,next){
   res.locals.user = req.user || null;
   next();
 });
+
 
 /**********
 * ROUTES *
@@ -233,13 +235,13 @@ app.delete("/events/:id", function (req, res) {
 // AUTH ROUTES
 
 // show landingpage view
-app.get('/', function(req, res) {
+app.get('/', middleware.denySignedIn, function(req, res) {
   res.render('landingpage', { user: req.user, });
 });
 
 // sign up new user, then log them in
-//hashes and salts password, saves new yser to db
-app.post('/', function(req, res) {
+//hashes and salts password, saves new user to db
+app.post('/', middleware.denySignedIn ,function(req, res) {
   User.register(new User(req.body), req.body.password, function(err, newUser) {
     if (err) {
       console.log("Error!!!" + err)
@@ -253,11 +255,11 @@ app.post('/', function(req, res) {
 });
 
 // show login view
-app.get('/login', function (req, res) {
+app.get('/login', middleware.denySignedIn, function (req, res) {
  res.render('login');
 });
 
-app.post('/login', passport.authenticate('local'), function(req, res) {
+app.post('/login',middleware.denySignedIn, passport.authenticate('local'), function(req, res) {
   console.log(req.user);
   res.redirect('/profile');
 });

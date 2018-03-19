@@ -29,6 +29,15 @@ a {
   font-weight: 700;
 }
 
+.fa {
+  font-size: 2em;
+  padding: .5em;
+}
+
+a:hover {
+  color: rgb(0, 210, 230);
+}
+
 .navlogo {
   margin: 0 auto;
   font-family: Knewave;
@@ -44,6 +53,11 @@ h2 {
   color: white;
   text-align: center;
   font-size: 1.2em;
+}
+
+p {
+  font-size: 1.3em;
+  line-height: 1.7em;
 }
 
 /* FORM */

@@ -59,7 +59,7 @@
 
     socket.on("average", function(data){
       console.log("average: ", data);
-      $("#average").text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10";
+      $("#average").text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10");
       var red = data;
       console.log(red);
       var blue = 255 - data;

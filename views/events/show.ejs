@@ -12,22 +12,21 @@
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <!-- connection to socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
 
+  <script type="text/javascript">
+    var formUrl = "<%= formUrl %>";
+    var method = "<%= userRating ? "PUT" : "POST" %>"
+  </script>
 
 </head>
-<body id="eventpage">
+<%
+  var red = event.average();
+  var blue = 255 - red;
+%>
 
-    <script>
-
-    var red = <%=event.average()%>;
-    console.log(red);
-    var blue = 255 - <%=event.average()%>;
-    console.log(blue);
-
-    $("#eventpage").css("background-color", `rgb(${red}, 0, ${blue})`);
-
-    </script>
-
+<body id="eventpage" style="background-color: rgb( <%= red %>, 0 , <%= blue %> )">
 
   <%- include ../partials/nav %>
 
@@ -39,31 +38,13 @@
     <section class="eventpageslider">
       <div id="slider"></div>
       <div class="section">
-        <form method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
+        <form id="rate" method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
           <input id="score" type="hidden" name="score" value="<%= (userRating || {}).score || 10 %>" />
           <div class="sliderrating"><p><%= event.lowScore %></p><p><%= event.highScore %></p></div>
-          <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating") %> </button>
         </form>
       </div>
     </section>
   </div>
-
-    <!-- connection to socket.IO -->
-    <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://10.1.7.180:3000');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
-
-    socket.on("average", function(data){
-      console.log("average: ", data);
-      $("#average").text("Average Score: " + data);
-    })
-  </script>
-
-
 
 <body>
 </html>

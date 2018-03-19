@@ -40,7 +40,7 @@
       <div id="slider"></div>
       <div class="section">
         <form method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
-          <input id="score" type="hidden" name="score" value="<%= (userRating || {}).score || 10 %>" />
+          <input id="score" type="hidden" name="score" value="<%= (userRating || {}).score || 125 %>" />
           <div class="sliderrating"><p><%= event.lowScore %></p><p><%= event.highScore %></p></div>
           <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating") %> </button>
         </form>

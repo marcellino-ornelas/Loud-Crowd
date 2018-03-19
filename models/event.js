@@ -6,7 +6,7 @@ var EventSchema = new Schema({
   ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
   lowScore: String,
   highScore: String,
-  owner: String
+  owner: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 EventSchema.methods.average = function () {
@@ -16,7 +16,7 @@ EventSchema.methods.average = function () {
 
     var score = (nextValue || {}).score || 0
 
-    return acc + parseInt( score ,10);
+    return acc + parseInt( score , 10);
   }, 0);
 
   return (finalScore / this.ratings.length) || 1

@@ -12,8 +12,6 @@
 
 </head>
 <body>
-
-
   <%- include partials/nav  %>
 
   <div class="welcomeuser">Welcome, <%= user.username %>!</div>
@@ -24,7 +22,7 @@
       <input type="text" name="eventName" class="profileinput" placeholder="event name">
       <div><input type="text" name="lowScore" class="profileinput" placeholder="not engaged">-
       <input type="text" name="highScore" class="profileinput" placeholder="very engaged"></div>
-      <input type="text" name="owner" value="<%= user.username %>" style="display: none;">
+      <input type="hidden" name="owner" value="<%= user._id %>">
       <input type="number" name="rating" value="5" style="display: none;">
       <input type="submit" class="button">
     </form>

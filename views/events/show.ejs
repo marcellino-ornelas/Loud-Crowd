@@ -23,13 +23,13 @@
     <h1><%= event.eventName %></h1>
 
     <section>
-      <h3 id="average"> Average Score: <%= event.average() %></h3>
-      <h3 id="sliderValue">Score: <%= userRating.score || 10  %></h3>
-      <div id="slider" class="section"></div>
+      <h3 id="average"> Average Score: <%= event.average() %> </h3>
+      <h3 id="sliderValue"> Score: <%= userRating.score || 10 %> </h3>
+      <div id="slider"></div>
       <div class="section">
-        <form method="POST" action="<%= formUrl  %><%= userRating && "?_method=PUT" %>" >
-          <input id="score" type="hidden" name="score" value="<%= userRating.score || 10  %>">
-          <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating")  %> </button>
+        <form method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
+          <input id="score" type="hidden" name="score" value="<%= userRating.score || 10 %>" />
+          <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating") %> </button>
         </form>
       </div>
     </section>

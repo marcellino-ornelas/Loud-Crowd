@@ -13,13 +13,13 @@ html,body{
   min-height: 100%;
 }
 
-nav {
+/*nav {
   display: flex;
   justify-content: space-between;
   background-color: white;
   height: 3.2em;
   align-items: center;
-}
+}*/
 
 a {
   color: black;
@@ -182,12 +182,19 @@ a, button, .logo-content, i{
 
 
 @media screen and (max-width: 972px){
+  .section{
+    padding-top:15px;
+    padding-bottom:15px;
+  }
+
   .navbar{
     font-size: 16px
   }
+
   .show{
     display: block !important;
   }
+
   .nav-bars{
     display: block;
   }
@@ -211,7 +218,7 @@ a, button, .logo-content, i{
   }
   .nav-links > .nav-link:hover{
     background-color: #eeeeee;
-    border-color:green;
+    border-color:#45d2e8;
   }
   .nav-links a{
     display: inline-block;

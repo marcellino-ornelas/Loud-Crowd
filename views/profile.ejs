@@ -51,7 +51,7 @@
         <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
         <th>Author: <%= event.owner %> </th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
-        <th><%= event.rating %></th>
+        <th><%= event.average() %></th>
 
 
           <!-- pencil icon to toggle update form -->

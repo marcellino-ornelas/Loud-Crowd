@@ -69,13 +69,15 @@ app.use(function(req,res,next){
 // HOMEPAGE ROUTE
 
 app.get("/profile", middleware.isLoggedIn, function (req, res) {
-  Event.find(function (err, allevents) {
+
+  Event.find({}).populate("ratings").exec(function (err, allevents) {
     if (err) {
-      res.status(500).json({ error: err.message, });
+      res.status(500).json({ error: err.message });
     } else {
-      res.render("profile", { events: allevents, user: req.user, });
+      res.render("profile", { events: allevents, user: req.user });
     }
   });
+
 });
 
 app.get("/events/:id", function(req, res) {

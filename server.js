@@ -39,18 +39,14 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
-/*
- * Ip Ware
-*/
-app.use("/events/:id", middleware.getIp );
-
-
 app.use(cookieParser());
+
 app.use(session({
   secret: 'whereismarcellino',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -69,8 +65,6 @@ app.use(function(req,res,next){
 /**********
 * ROUTES *
 **********/
-
-
 
 // HOMEPAGE ROUTE
 
@@ -93,7 +87,6 @@ app.get("/events/:id", function(req, res) {
     if(err){
       res.status(500).json({ error: err.message });
     }
-    // var ip = req.userIp.clientIp;
 
     if( !event ){
       res.redirect("/profile");
@@ -108,7 +101,6 @@ app.get("/events/:id", function(req, res) {
     if(userRating){
       formUrl += "/"+userRating._id;
     }
-
 
     res.render("events/show", {
       event: event,
@@ -129,11 +121,8 @@ app.post("/events/:id/rating",function(req,res){
 
   var data = {
     score: req.body.score,
-    // userAddress: req.userIp.clientIp,
     event: id
   }
-
-
 
   Rating.create( data, function(err,rating){
     if(err){

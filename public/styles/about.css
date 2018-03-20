@@ -4,7 +4,7 @@ body {
 
 .aboutpage {
   margin: 4em auto;
-  padding: 3em;
+  padding: 8em 4em;
   background-color: white;
   width: 85%;
   text-align: center;
@@ -13,11 +13,8 @@ body {
 .aboutpage h1 {
   color: rgb(0, 210, 230);
   text-transform: uppercase;
-  font-size: 1.6em;
-}
-
-.aboutpage h2 {
-  color: black;
+  font-size: 2.2em;
+  padding-top: 1em;
 }
 
 .aboutpage p {
@@ -25,7 +22,7 @@ body {
 }
 
 .aboutapp {
-  width: 90%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -36,12 +33,21 @@ body {
 
 .profile {
   width: 30%;
-  padding-top: 4em;
+  padding-top: 8em;
 }
 
 .profile img {
   width: 70%;
   border-radius: 10em;
+}
+
+.profile h1 {
+  font-size: 1.7em;
+  color: black;
+}
+
+.profilelink {
+  padding: 0;
 }
 
 @media screen and (max-width: 972px) {

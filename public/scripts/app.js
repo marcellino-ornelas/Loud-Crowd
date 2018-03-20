@@ -73,7 +73,7 @@ $(function() {
       console.log("connection established");
     });
 
-    socket.on("average", updateAverage );
+    socket.on("average",updateAverage);
   }
 
   function updateAverage(data){
@@ -82,7 +82,7 @@ $(function() {
     var red = data;
     var blue = 255 - data;
 
-    $body.css("background-color", `rbg(${red}, 0, ${blue})`);
+    $body.css("background-color", `rgb(${red}, 0, ${blue})`);
 
   }
 

@@ -124,7 +124,7 @@ app.get("/events/:slug", function(req, res) {
     if(userRating){
       formUrl += "/" + userRating._id;
     }
-    
+
     res.render("events/show", {
       event: event,
       userRating: userRating,

@@ -36,9 +36,8 @@
     <h2 id="average"> Average Score: <%=average.toFixed(2)%> out of 10 </h2>
 
     <section class="eventpageslider">
-      <div id="slider"></div>
+      <div id="slider" data-value="<%= userRating.score || 125 %>"></div>
     </section>
   </div>
-
 <body>
 </html>

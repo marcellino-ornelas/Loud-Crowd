@@ -87,18 +87,22 @@ $(function() {
   }
 
   //Contact Form - checking for errors
-    $(".submit").on("click", function(event) {
+    $("form").on("submit", function(event) {
+      var hasError = false;
       event.preventDefault();
       $(".checkForError").each(function() {
         if ($(this).val() === "") {
           $(this).addClass("error");
           $(".error").show();
           $(this).siblings(".errorMessage").show();
+          if(!hasError){ hasError = true;}
         } else {
           $(this).removeClass("error");
           $(this).siblings(".errorMessage").hide();
         }
       });
+
+      if(!hasError) this.submit();
     });
 
 });

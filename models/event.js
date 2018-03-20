@@ -2,10 +2,10 @@ var mongoose = require("mongoose"),
   Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
-  eventName: String,
+  eventName: { type: String, unique: true, required: true },
   ratings: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
-  lowScore: String,
-  highScore: String,
+  lowScore: { type: String, required: true },
+  highScore: { type: String, required: true },
   owner: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 

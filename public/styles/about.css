@@ -56,7 +56,25 @@ body {
     align-items: center;
   }
 
-  .profile {
-    width: 90%;
+  .profile, .aboutapp {
+    width: 85%;
+  }
+
+  .aboutpage {
+    margin-top: 2em;
+    padding: 1em;
+  }
+
+  .aboutpage p {
+    font-size: 1em;
+    text-align: justify;
+  }
+
+  .profile, .aboutus {
+    padding-top: 3em;
+  }
+
+  .profile img {
+    width: 80%;
   }
 }

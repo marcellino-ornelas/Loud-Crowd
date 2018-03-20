@@ -7,6 +7,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     _ = require("lodash"),
+    slug = require('speakingurl');
     socket = require("socket.io"),
     middleware = require("./middleware"),
     passport = require('passport'),
@@ -93,9 +94,14 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
-app.get("/events/:id", function(req, res) {
+app.get("/events/:slug", function(req, res) {
 
-  Event.findById(req.params.id).populate("ratings").exec(function(err,event){
+  var slug = req.params.slug;
+  var eventName = slug.split("-").join(" ");
+
+  Event.find({eventName: eventName}).populate("ratings").exec(function(err, event){
+    event = event[0];
+    console.log(event);
     if(err){
       res.status(500).json({ error: err.message });
     }
@@ -108,14 +114,12 @@ app.get("/events/:id", function(req, res) {
       return item._id.toString() === req.cookies.voteId;
     });
 
-    var formUrl = "/events/"+event._id+"/rating";
+    var formUrl = "/events/" + event._id + "/rating";
 
     if(userRating){
-      formUrl += "/"+userRating._id;
+      formUrl += "/" + userRating._id;
     }
-
     // io.emit("average", event.average());
-
     res.render("events/show", {
       event: event,
       userRating: userRating,

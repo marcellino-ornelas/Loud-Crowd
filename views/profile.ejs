@@ -38,7 +38,8 @@
     </tr>
     <% for (let event of events) { %>
       <tr class="" data-id="<%= event._id %>">
-        <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
+        <% var slug = event.eventName.split(" ").join("-");%>
+        <th><a href="/events/<%=slug%>" class=""><%= event.eventName %></a></th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
         <% var average = event.average() * 10 / 255 %>
         <th><%=average.toFixed(2)%> out of 10</th>

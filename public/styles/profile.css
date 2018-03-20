@@ -13,13 +13,16 @@
 
 .profileform div {
   display: flex;
+  flex-direction: column;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
 
-.profileform div input {
-  width: 48%;
+#ratingflex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .profilebutton {

@@ -3,5 +3,53 @@
   color: white;
   font-family: knewave;
   font-size: 3em;
-  padding: 3em;
+  padding-top: 3em;
+}
+
+.eventpageslider {
+  background: white;
+  padding: 4em 2em 1em 2em;
+  position: fixed;
+  width: 100%;
+  margin-bottom: 2em;
+  bottom: 0;
+}
+
+.ui-widget.ui-widget-content {
+  height: 3em;
+  border-radius: 0;
+  background: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0)) no-repeat center center fixed;
+}
+
+#slider {
+  border: none;
+}
+
+span.ui-slider-handle.ui-corner-all.ui-state-default {
+  border: none;
+  border-radius: 0;
+  background-color: rgb(0, 210, 230);
+  height: 3.6em;
+  align-items: center;
+}
+
+.sliderrating {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sliderrating p {
+  font-size: 1.5em;
+  padding-top: 1em;
+}
+
+
+
+@media screen and (max-width: 972px) {
+
+  .eventpagetitle {
+    padding-top: 1em;
+    font-size: 2.3em;
+  }
+
 }

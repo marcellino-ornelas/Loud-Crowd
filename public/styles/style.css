@@ -13,20 +13,21 @@ html,body{
   min-height: 100%;
 }
 
-/*nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  height: 3.2em;
-  align-items: center;
-}*/
-
 a {
   color: black;
   text-decoration: none;
   padding: 0 1.5em 0 1.5em;
   font-size: 1.4em;
   font-weight: 700;
+}
+
+.fa {
+  font-size: 2em;
+  padding: .5em;
+}
+
+a:hover {
+  color: rgb(0, 210, 230);
 }
 
 .navlogo {
@@ -44,6 +45,11 @@ h2 {
   color: white;
   text-align: center;
   font-size: 1.2em;
+}
+
+p {
+  font-size: 1.3em;
+  line-height: 1.7em;
 }
 
 /* FORM */
@@ -77,14 +83,27 @@ input {
   font-weight: 900;
 }
 
+.formdiv {
+  width: 100%;
+}
+
+.error {
+  display: none;
+  border: .14em solid red;
+}
+
+.errorMessage {
+  display: none;
+  color: red;
+  text-align: left;
+  font-size: .9em;
+  padding: 0 0 .7em 0;
+}
+
 @media only screen and (max-width: 700px) {
 
   a {
       padding: 0 .7em 0 .7em;
-  }
-
-  .navlogo {
-    display: none;
   }
 
   .myform h2 {
@@ -97,7 +116,7 @@ input {
 
 }
 
-a, button, .logo-content, i{
+a, button, .logo-content, i {
   cursor: pointer;
 }
 
@@ -109,18 +128,8 @@ a, button, .logo-content, i{
   overflow: hidden;
 }
 
-.section{
-  padding-top: 2em;
-  padding-bottom: 2em;
-}
-
 .space {
   padding: .5em;
-}
-
-.container{
-  width: 85%;
-  margin: auto;
 }
 
 .fx {
@@ -134,7 +143,7 @@ a, button, .logo-content, i{
 }
 
 /* navbar */
-.navbar{
+.navbar {
   background-color: white;
 }
 
@@ -163,7 +172,6 @@ a, button, .logo-content, i{
 .nav-bars {
   display: none;
   font-size: 2em;
-  padding-left: .3em;
 }
 
 .logo-content{
@@ -182,25 +190,25 @@ a, button, .logo-content, i{
 }
 
 
-@media screen and (max-width: 972px){
-  .section{
-    padding-top:15px;
-    padding-bottom:15px;
-  }
+@media screen and (max-width: 972px) {
 
-  .navbar{
-    font-size: 16px
-  }
-
-  .show{
+  .show {
     display: block !important;
   }
 
-  .nav-bars{
+  .navbar {
+    background-color: transparent;
+  }
+
+  .nav-bars {
     display: block;
   }
 
-  .nav-links{
+  .navlogo {
+    display: none;
+  }
+
+  .nav-links {
     display: none;
     position: absolute;
     left: 0;
@@ -208,20 +216,19 @@ a, button, .logo-content, i{
     height: 100%;
     width: 30%;
     min-width: 250px;
-    background-color: #f5f5f5;
+    background-color: white;
     z-index: 10;
     border-right: 1px solid #bdbdbd;
   }
 
-  .nav-links > .nav-link{
+  .nav-links > .nav-link {
     border-left:5px solid transparent;
     border-bottom: 2px solid #e0e0e0;
   }
-  .nav-links > .nav-link:hover{
-    background-color: #eeeeee;
+  .nav-links > .nav-link:hover {
     border-color:#45d2e8;
   }
-  .nav-links a{
+  .nav-links a {
     display: inline-block;
     width: 100%;
     padding-top: 10px;

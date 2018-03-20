@@ -20,29 +20,45 @@
   <div class="myform profileform">
     <h2>add an event</h2>
     <form method="POST" action="/events">
-      <input type="text" name="eventName" class="profileinput" placeholder="event name" title="Enter event">
-      <div><input type="text" name="lowScore" class="profileinput" placeholder="not engaged" title="Enter value for LOW engagement">-
-      <input type="text" name="highScore" class="profileinput" placeholder="very engaged" title="Enter value for HIGH engagement"></div>
-      <input type="text" name="owner" value="<%= user.username %>" style="display: none;">
-      <input type="number" name="rating" val.ue="5" style="display: none;">
-      <input type="submit" class="button">
+
+      <div>
+        <input type="text" name="eventName" class="profileinput checkForError formdiv" placeholder="event name" title="Enter event">
+        <p class="errorMessage">Please enter an event</p>
+      </div>
+      <div id="ratingflex">
+        <div>
+          <input type="text" name="lowScore" class="profileinput checkForError formdiv" placeholder="not engaged" " title="Enter value for LOW engagement">
+          <p class="errorMessage">Please enter a value for low engagement</p>
+        </div>
+        <p style="padding: .6em .3em;">-</p>
+        <div>
+          <input type="text" name="highScore" class="profileinput checkForError formdiv" placeholder="very engaged" title="Enter value for HIGH engagement">
+          <p class="errorMessage">Please enter a value for high engagement</p>
+        </div>
+      </div>
+      <input type="hidden" name="owner" value="<%= user._id %>">
+      <input type="number" name="rating" value="5" style="display: none;">
+      <div>
+        <input type="submit" class="button formdiv submit">
+      </div>
+
     </form>
   </div>
 
   <table class="pastevents" id="">
     <tr class="tablelabels">
       <th>Event Name</th>
-      <th>Author</th>
       <th>Scale</th>
       <th>Score</th>
       <th>Delete</th>
     </tr>
     <% for (let event of events) { %>
       <tr class="" data-id="<%= event._id %>">
-        <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
-        <th>Author: <%= event.owner %> </th>
+        <% var slug = event.eventName.split(" ").join("-");%>
+        <th><a href="/events/<%=slug%>" class=""><%= event.eventName %></a></th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
-        <th><%= event.average() %></th>
+        <% var average = event.average() * 10 / 255 %>
+        <th><%=average.toFixed(2)%> out of 10</th>
 
 
           <!-- pencil icon to toggle update form -->

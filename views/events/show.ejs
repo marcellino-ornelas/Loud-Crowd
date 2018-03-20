@@ -12,59 +12,35 @@
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <!-- connection to socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
 
+  <script type="text/javascript">
+    var formUrl = "<%= formUrl %>";
+    var method = "<%= userRating ? "PUT" : "POST" %>"
+  </script>
 
 </head>
-<body id="eventpage">
 
-    <script>
+<%
+  var red = event.average();
+  var blue = 255 - red;
+%>
 
-    var red = <%=event.average()%>;
-    console.log(red);
-    var blue = 255 - <%=event.average()%>;
-    console.log(blue);
-
-    $("#eventpage").css("background-color", `rgb(${red}, 0, ${blue})`);
-
-    </script>
-
+<body id="eventpage" style="background-color: rgb(<%=red%>, 0 ,<%=blue%> )">
 
   <%- include ../partials/nav %>
 
   <div class="container">
     <h1 class="eventpagetitle"><%= event.eventName %></h1>
+    <% var average = event.average() * 10 / 255 %>
+    <h2 id="average"> Average Score: <%=average.toFixed(2)%> out of 10 </h2>
 
-    <section>
-      <h3 id="average"> Average Score: <%= event.average() %> </h3>
+    <section class="eventpageslider">
 
-      <h3 id="sliderValue"> Score: <%= (userRating || {}).score || 10 %> </h3>
-
-      <div id="slider"></div>
-      <div class="section">
-        <form method="POST" action="<%= formUrl %><%= userRating && "?_method=PUT" %>" >
-          <input id="score" type="hidden" name="score" value="<%= (userRating || {}).score || 10 %>" />
-          <button type="submit" class="button"> <%= (userRating ? "Update" : "Add Your Rating") %> </button>
-        </form>
-      </div>
+      <div id="slider" data-value="<%= (userRating || {}).score || 125 %>"></div>
+      <div class="sliderrating"><p><%= event.lowScore %></p><p><%= event.highScore %></p>
     </section>
   </div>
-
-    <!-- connection to socket.IO -->
-    <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://10.1.7.180:3000');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
-
-    socket.on("average", function(data){
-      console.log("average: ", data);
-      $("#average").text("Average Score: " + data);
-    })
-  </script>
-
-
-
 <body>
 </html>

@@ -21,12 +21,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function (socket) {
-  socket.emit('news', "connection established");
-
-  // socket.on('my other event', function (data) {
-  //   console.log(data);
-  // })
-
+  console.log("connection established");
 })
 
 
@@ -54,18 +49,14 @@ app.set("view engine", "ejs");
 
 app.use(methodOverride("_method"));
 
-/*
- * Ip Ware
-*/
-app.use("/events/:id", middleware.getIp );
-
-
 app.use(cookieParser());
+
 app.use(session({
   secret: 'whereismarcellino',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -85,30 +76,35 @@ app.use(function(req,res,next){
 * ROUTES *
 **********/
 
-
-
 // HOMEPAGE ROUTE
-
 app.get("/profile", middleware.isLoggedIn, function (req, res) {
 
-  Event.find({}).populate("ratings").exec(function (err, allevents) {
+  Event.find({ owner: req.user._id }).populate("ratings").exec(function (err, allevents) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.render("profile", { events: allevents, user: req.user });
+      res.render("profile", { events: allevents});
     }
   });
 
 });
 
-app.get("/events/:id", function(req, res) {
+app.get("/about", function (req, res) {
+  res.render("about");
+});
 
+app.get("/events/:slug", function(req, res) {
 
-  Event.findById(req.params.id).populate("ratings").exec(function(err,event){
+  var slug = req.params.slug;
+  var eventName = slug.split("-").join(" ");
+
+  Event.find({eventName: eventName}).populate("ratings").exec(function(err, event){
+    event = event[0];
+    console.log(event);
     if(err){
       res.status(500).json({ error: err.message });
     }
-    
+
     if( !event ){
       res.redirect("/profile");
     }
@@ -117,14 +113,12 @@ app.get("/events/:id", function(req, res) {
       return item._id.toString() === req.cookies.voteId;
     });
 
-    var formUrl = "/events/"+event._id+"/rating";
+    var formUrl = "/events/" + event._id + "/rating";
 
     if(userRating){
-      formUrl += "/"+userRating._id;
+      formUrl += "/" + userRating._id;
     }
-
-    io.emit("average", event.average());
-
+    // io.emit("average", event.average());
     res.render("events/show", {
       event: event,
       userRating: userRating,
@@ -140,36 +134,39 @@ app.get("/events/:id", function(req, res) {
 */
 app.post("/events/:id/rating",function(req,res){
 
-
+  console.log(req.cookies.voteId)
   var id = req.params.id;
 
   var data = {
     score: req.body.score,
-    // userAddress: req.userIp.clientIp,
     event: id
   }
-
-
 
   Rating.create( data, function(err,rating){
     if(err){
       console.log(err)
-      res.json({ error: "error" });
+      res.json({ error: err });
     } else {
 
-      res.cookie("voteId", rating._id );
+      Event.findById(id).exec(function(err, oldEvent){
 
-      Event.findById(id).populate("ratings").exec(function(err, event){
+        oldEvent.ratings.push(rating._id);
 
-        event.ratings.push(rating._id);
-
-        event.save(function(err, saved_event){
+        oldEvent.save(function(err, saved_event){
           if(err){
-            res.json({ error: "error" });
+            res.json({ error: err });
           }
 
-          // io.emit("average", event.average() );
-          res.redirect("/events/" + id);
+          Event.populate( saved_event, { path: "ratings"}, function(err, newEvent){
+            if(err){
+              res.status(500).json(err);
+            }
+            var average = newEvent.average();
+
+            res.cookie("voteId", rating._id );
+            io.emit("average", average );
+            res.json({average: average, rating: rating});
+          })
         });
 
       });
@@ -179,7 +176,6 @@ app.post("/events/:id/rating",function(req,res){
 });
 
 app.put("/events/:id/rating/:rating_id",function(req,res){
-  console.log("Score: " + req.body.score);
 
   var data = { score: req.body.score };
 
@@ -187,11 +183,17 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
     .exec(function(err,rating){
 
       if(err || !rating){
-        console.log(err);
+        res.status(500).json({error: err, rating: rating })
       }
-      res.cookie("voteId", rating._id)
-      // io.emit("average", .average() );
-      res.redirect("/events/"+req.params.id);
+
+      Event.findById(rating.event).populate("ratings").exec(function(err, event){
+        var average = event.average();
+
+        res.cookie("voteId", rating._id);
+        io.emit("average", average );
+        res.json({ average: average});
+      })
+
     });
 });
 
@@ -203,11 +205,18 @@ app.post("/events", function(req, res) {
   }
 
   // save new event in db
-  newevent.save(function (err) {
+  newevent.save(function (err,event) {
     if (err) {
       res.status(500).json({ error: err.message, });
     } else {
-      res.redirect("/profile");
+      req.user.events.push(event._id);
+
+      req.user.save(function(err){
+        if(err){
+          console.log(err)
+        }
+        res.redirect("/profile");
+      })
     }
   });
 });
@@ -255,8 +264,20 @@ app.delete("/events/:id", function (req, res) {
   var eventId = req.params.id;
 
   // find event in db by id and remove
-  Event.findOneAndRemove({ _id: eventId, }, function () {
-    res.redirect("/profile");
+  Event.findOneAndRemove({ _id: eventId, }, function (err, event) {
+
+    if( err ){
+      res.json({error: err});
+      res.redirect("/profile");
+    }
+
+    Rating.remove({ event: event._id}).exec(function(err){
+      if( err ){
+        res.json({error: err})
+      };
+      res.redirect("/profile");
+    })
+
   });
 });
 
@@ -277,9 +298,9 @@ app.post('/', middleware.denySignedIn ,function(req, res) {
       res.status(400)
     } else {
       passport.authenticate('local')(req, res, function() {
-      res.redirect('/profile');
-    });
-  }
+        res.redirect('/profile');
+      });
+    }
   });
 });
 

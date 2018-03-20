@@ -1,0 +1,80 @@
+body {
+  background: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0)) no-repeat center center fixed;
+}
+
+.aboutpage {
+  margin: 4em auto;
+  padding: 8em 4em;
+  background-color: white;
+  width: 85%;
+  text-align: center;
+}
+
+.aboutpage h1 {
+  color: rgb(0, 210, 230);
+  text-transform: uppercase;
+  font-size: 2.2em;
+  padding-top: 1em;
+}
+
+.aboutpage p {
+  padding-top: 1em;
+}
+
+.aboutapp {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.aboutus {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile {
+  width: 30%;
+  padding-top: 8em;
+}
+
+.profile img {
+  width: 70%;
+  border-radius: 10em;
+}
+
+.profile h1 {
+  font-size: 1.7em;
+  color: black;
+}
+
+.profilelink {
+  padding: 0;
+}
+
+@media screen and (max-width: 972px) {
+  .aboutus {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile, .aboutapp {
+    width: 85%;
+  }
+
+  .aboutpage {
+    margin-top: 2em;
+    padding: 1em;
+  }
+
+  .aboutpage p {
+    font-size: 1em;
+    text-align: justify;
+  }
+
+  .profile, .aboutus {
+    padding-top: 3em;
+  }
+
+  .profile img {
+    width: 80%;
+  }
+}

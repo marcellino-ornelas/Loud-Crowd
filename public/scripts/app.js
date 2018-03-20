@@ -14,8 +14,7 @@ $(function() {
     // toggle side nav when in mobile
     var displayIsOn = $navContent.is(":hidden");
 
-    $navContent.toggleClass("show",displayIsOn);
-    $overlay.toggleClass("show",displayIsOn);
+    $navContent.add($overlay).toggleClass("show",displayIsOn);
     $body.toggleClass("no-flow", displayIsOn);
 
   }

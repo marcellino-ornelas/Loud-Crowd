@@ -6,7 +6,9 @@ var express = require('express'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
+    flash = require('connect-flash'),
     _ = require("lodash"),
+    async = require('async'),
     socket = require("socket.io"),
     middleware = require("./middleware"),
     passport = require('passport'),
@@ -16,14 +18,9 @@ var express = require('express'),
 var server = http.createServer(app);
 var io = socket(server);
 
-app.get('/', function(req, res){
-  res.sendfile(__dirname, + 'index/html');
-});
-
 io.on('connection', function (socket) {
   console.log("connection established");
 })
-
 
 /************
 * DATABASE *
@@ -37,6 +34,7 @@ var db = require('./models'),
 /*************
 * MIDDLEWARE *
 **************/
+
 
 // configure bodyParser (for receiving form data)
 app.use(bodyParser.urlencoded({ extended: true, }));
@@ -57,6 +55,9 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// flash messages
+app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -65,12 +66,21 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 // assign signed in user to locals for template use
 app.use(function(req,res,next){
+  // add user to locals
   res.locals.user = req.user || null;
+
+  /*
+   * Get all flash messages before rendering
+  */
+  res.render = middleware.renderWithMessages(res.render);
+
   next();
 });
 
+app.use("/login", middleware.denySignedIn);
 
 /**********
 * ROUTES *
@@ -98,14 +108,10 @@ app.get("/events/:slug", function(req, res) {
   var slug = req.params.slug;
   var eventName = slug.split("-").join(" ");
 
-  Event.find({eventName: eventName}).populate("ratings").exec(function(err, event){
-    event = event[0];
+  Event.findOne({eventName: eventName}).populate("ratings").exec(function(err, event){
     console.log(event);
-    if(err){
-      res.status(500).json({ error: err.message });
-    }
-
-    if( !event ){
+    if(err || !event){
+      req.flash("error", "Sorry there was a problem trying to get this event. Please try again later");
       res.redirect("/profile");
     }
 
@@ -118,7 +124,7 @@ app.get("/events/:slug", function(req, res) {
     if(userRating){
       formUrl += "/" + userRating._id;
     }
-    // io.emit("average", event.average());
+    
     res.render("events/show", {
       event: event,
       userRating: userRating,
@@ -134,7 +140,6 @@ app.get("/events/:slug", function(req, res) {
 */
 app.post("/events/:id/rating",function(req,res){
 
-  console.log(req.cookies.voteId)
   var id = req.params.id;
 
   var data = {
@@ -143,7 +148,7 @@ app.post("/events/:id/rating",function(req,res){
   }
 
   Rating.create( data, function(err,rating){
-    if(err){
+    if(err || !rating){
       console.log(err)
       res.json({ error: err });
     } else {
@@ -153,7 +158,7 @@ app.post("/events/:id/rating",function(req,res){
         oldEvent.ratings.push(rating._id);
 
         oldEvent.save(function(err, saved_event){
-          if(err){
+          if(err || !saved_event){
             res.json({ error: err });
           }
 
@@ -179,45 +184,39 @@ app.put("/events/:id/rating/:rating_id",function(req,res){
 
   var data = { score: req.body.score };
 
-  Rating.findByIdAndUpdate(req.params.rating_id, data )
-    .exec(function(err,rating){
+  Rating.findByIdAndUpdate(req.params.rating_id, data ).exec(function(err,rating){
 
-      if(err || !rating){
-        res.status(500).json({error: err, rating: rating })
-      }
+    if(err || !rating){
+      res.json({error: err, rating: rating })
+    }
 
-      Event.findById(rating.event).populate("ratings").exec(function(err, event){
-        var average = event.average();
+    Event.findById(rating.event).populate("ratings").exec(function(err, event){
+      var average = event.average();
 
-        res.cookie("voteId", rating._id);
-        io.emit("average", average );
-        res.json({ average: average});
-      })
+      res.cookie("voteId", rating._id);
+      io.emit("average", average );
+      res.json({ average: average});
+    })
 
-    });
+  });
 });
 
-app.post("/events", function(req, res) {
-  var newevent = new Event(req.body);
+app.post("/events", middleware.isLoggedIn, function(req, res) {
 
-  if (!req.user) {
-     return res.redirect("/login")
-  }
+  var newEvent = new Event(req.body);
 
-  // save new event in db
-  newevent.save(function (err,event) {
-    if (err) {
-      res.status(500).json({ error: err.message, });
-    } else {
-      req.user.events.push(event._id);
+  req.user.events.push(newEvent._id)
 
-      req.user.save(function(err){
-        if(err){
-          console.log(err)
-        }
-        res.redirect("/profile");
-      })
-    }
+  async.series([
+      function(cb){ newEvent.save(cb); },
+      function(cb){ req.user.save(cb); },
+    ], function(err,results){
+      if(err){
+        req.flash("error","Sorry there was a problem saving your event. Make sure all fields are filled out and try again.");
+      } else {
+        req.flash("success", "You event has been successfully added");
+      }
+      res.redirect("/profile");
   });
 });
 
@@ -255,30 +254,22 @@ app.put("/events/:id", function (req, res) {
 
 
 // delete event
-app.delete("/events/:id", function (req, res) {
-  // get event id from url params (`req.params`)
-  if (!req.user) {
-     return res.redirect("/login");
-  }
+app.delete("/events/:id", middleware.isLoggedIn, function (req, res) {
 
   var eventId = req.params.id;
 
-  // find event in db by id and remove
-  Event.findOneAndRemove({ _id: eventId, }, function (err, event) {
-
-    if( err ){
-      res.json({error: err});
+  async.series([
+      function(cb){ Event.findOneAndRemove({ _id: eventId, }, cb); },
+      function(cb){ Rating.remove({ event: eventId }).exec(cb); },
+    ], function(err,results){
+      if(err){
+        req.flash("error","Sorry there was a problem removing your event. Please try again.");
+      } else {
+        req.flash("success", "You event has been successfully deleted");
+      }
       res.redirect("/profile");
-    }
-
-    Rating.remove({ event: event._id}).exec(function(err){
-      if( err ){
-        res.json({error: err})
-      };
-      res.redirect("/profile");
-    })
-
   });
+
 });
 
 
@@ -286,16 +277,16 @@ app.delete("/events/:id", function (req, res) {
 
 // show landingpage view
 app.get('/', middleware.denySignedIn, function(req, res) {
-  res.render('landingpage', { user: req.user, });
+  res.render('landingpage');
 });
 
 // sign up new user, then log them in
 //hashes and salts password, saves new user to db
-app.post('/', middleware.denySignedIn ,function(req, res) {
+app.post('/',function(req, res) {
   User.register(new User(req.body), req.body.password, function(err, newUser) {
     if (err) {
-      console.log("Error!!!" + err)
-      res.status(400)
+      req.flash("error", "There was a problem signing you up. Please try again later")
+      res.redirect("/");
     } else {
       passport.authenticate('local')(req, res, function() {
         res.redirect('/profile');
@@ -305,20 +296,20 @@ app.post('/', middleware.denySignedIn ,function(req, res) {
 });
 
 // show login view
-app.get('/login', middleware.denySignedIn, function (req, res) {
+
+app.get('/login', function (req, res) {
  res.render('login');
 });
 
-app.post('/login',middleware.denySignedIn, passport.authenticate('local'), function(req, res) {
-  console.log(req.user);
-  res.redirect('/profile');
+app.post('/login', passport.authenticate('local',{ failureFlash: true, failureRedirect: '/login'}), function(req, res) {
+    res.redirect('/profile');
 });
 
 // log out user
 app.get('/logout', function (req, res) {
-  console.log("BEFORE logout", JSON.stringify(req.user));
+
   req.logout();
-  console.log("AFTER logout", JSON.stringify(req.user));
+  req.flash("success", "You have successfully been logged out");
   res.redirect('/');
 });
 
@@ -424,9 +415,6 @@ app.delete("/api/events/:id", function (req, res) {
     }
   });
 });
-
-
-
 
 /**********
  * SERVER *

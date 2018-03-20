@@ -1,0 +1,17 @@
+<%#
+/*
+ * Flash Messages
+*/
+%>
+<div>
+  <% for(var key in messages){
+    var curr = messages[key]
+    curr.forEach(function(message){
+  %>
+      <div class="message <%= key %>">
+        <%= message %>
+      </div>
+  <%
+    })
+  } %>
+</div>

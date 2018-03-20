@@ -235,3 +235,34 @@ a, button, .logo-content, i {
     padding-bottom: 10px;
   }
 }
+
+.message {
+  display: block;
+  border-radius: 10px;
+  padding: 20px 10px;
+  width: 75%;
+  margin: 10px auto;
+
+}
+
+.message.info{
+  color:#03a9f4;
+  background-color:#e1f5fe;
+}
+
+.message.success{
+  color:#4caf50;
+  background-color:#c8e6c9;
+}
+
+.message.warning{
+  color:#ff9800;
+  background-color:#ffe0b2;
+}
+
+.message.error{
+  color: #f44336;
+  background-color:#ffebee;
+}
+
+

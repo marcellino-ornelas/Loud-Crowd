@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
   passportLocalMongoose = require('passport-local-mongoose');
 
 var UserSchema = new Schema({
-  name: String,
-  username: String,
+  name: { type: String, required: true },
+  username: { type: String, unique: true, required: true },
   events: [{ type: Schema.Types.ObjectId, ref: 'Rating' }]
 });
 

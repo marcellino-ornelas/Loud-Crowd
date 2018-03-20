@@ -3,10 +3,11 @@ body {
 }
 
 .loginform {
-  padding-top: 14em;
+  padding-top: 7em;
 }
 
-
-/* #loginnav {
-  color: url("#background");
-} */
+@media screen and (max-width: 972px) {
+  .loginform {
+    padding-top: 2em;
+  }
+}

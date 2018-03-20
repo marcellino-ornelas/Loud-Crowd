@@ -97,10 +97,6 @@ input {
       padding: 0 .7em 0 .7em;
   }
 
-  .navlogo {
-    display: none;
-  }
-
   .myform h2 {
     font-size: 1.4em;
   }
@@ -198,6 +194,10 @@ a, button, .logo-content, i{
 
   .nav-bars {
     display: block;
+  }
+
+  .navlogo {
+    display: none;
   }
 
   .nav-links {

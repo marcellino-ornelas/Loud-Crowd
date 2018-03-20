@@ -18,10 +18,21 @@
   <div class="myform">
     <h2>signup to add an event</h2>
     <form method="POST" action="/">
-      <input type="text" name="name" class="" placeholder="Name">
-      <input type="text" name="username" class="" placeholder="Username">
-      <input type="password" name="password" class="" placeholder="Password">
-      <input type="submit" value="sign up" class="button">
+      <div>
+        <input type="text" name="name" class="checkForError formdiv" placeholder="Name">
+        <p class="errorMessage">Please enter your name</p>
+      </div>
+      <div>
+        <input type="text" name="username" class="checkForError formdiv" placeholder="Username">
+        <p class="errorMessage">Please enter a username</p>
+      </div>
+      <div>
+        <input type="password" name="password" class="checkForError formdiv" placeholder="Password">
+        <p class="errorMessage">Please enter a password</p>
+      </div>
+      <div>
+        <input type="submit" value="sign up" class="button formdiv submit">
+      </div>
     </form>
   </div>
 

@@ -17,9 +17,17 @@
   <div class="myform loginform">
     <h2>Login</h2>
     <form method="POST" action="/login">
-      <input type="text" name="username" class="" placeholder="Username">
-      <input type="password" name="password" class="" placeholder="Password">
-      <input type="submit" class="button">
+      <div>
+        <input type="text" name="username" class="checkForError formdiv" placeholder="Username">
+        <p class="errorMessage">Please enter your username</p>
+      </div>
+      <div>
+        <input type="password" name="password" class="checkForError formdiv" placeholder="Password">
+        <p class="errorMessage">Please enter your password</p>
+      </div>
+      <div>
+        <input type="submit" class="button formdiv submit">
+      </div>
     </form>
   </div>
 

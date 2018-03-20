@@ -83,6 +83,23 @@ input {
   font-weight: 900;
 }
 
+.formdiv {
+  width: 100%;
+}
+
+.error {
+  display: none;
+  border: .14em solid red;
+}
+
+.errorMessage {
+  display: none;
+  color: red;
+  text-align: left;
+  font-size: .9em;
+  padding: 0 0 .7em 0;
+}
+
 @media only screen and (max-width: 700px) {
 
   a {

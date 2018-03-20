@@ -17,15 +17,35 @@
 
   <div class="welcomeuser">Welcome, <%= user.username %>!</div>
 
+
+
+
+  <input type="text" name="username" class="checkForError formdiv" placeholder="Username">
+  <p class="errorMessage">Please enter a username</p>
+
+
+
   <div class="myform profileform">
     <h2>add an event</h2>
     <form method="POST" action="/events">
-      <input type="text" name="eventName" class="profileinput" placeholder="event name">
-      <div><input type="text" name="lowScore" class="profileinput" placeholder="not engaged">-
-      <input type="text" name="highScore" class="profileinput" placeholder="very engaged"></div>
+      <div>
+        <input type="text" name="eventName" class="profileinput checkForError formdiv" placeholder="event name">
+        <p class="errorMessage">Please enter an event</p>
+      </div>
+      <div>
+        <divclass="formdiv">
+          <input type="text" name="lowScore" class="profileinput checkForError formdiv" placeholder="not engaged">
+          <p class="errorMessage">Please enter a username</p>
+        </div>
+        -
+        <div class="formdiv">
+          <input type="text" name="highScore" class="profileinput checkForError formdiv" placeholder="very engaged">
+          <p class="errorMessage">Please enter a username</p>
+        </div>
+      </div>
       <input type="hidden" name="owner" value="<%= user._id %>">
       <input type="number" name="rating" value="5" style="display: none;">
-      <input type="submit" class="button">
+      <input type="submit" class="button formdiv submit">
     </form>
   </div>
 

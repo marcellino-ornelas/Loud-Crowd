@@ -24,15 +24,15 @@
         <input type="text" name="eventName" class="profileinput checkForError formdiv" placeholder="event name">
         <p class="errorMessage">Please enter an event</p>
       </div>
-      <div>
-        <div class="formdiv">
+      <div id="ratingflex">
+        <div>
           <input type="text" name="lowScore" class="profileinput checkForError formdiv" placeholder="not engaged">
-          <p class="errorMessage">Please enter a username</p>
+          <p class="errorMessage">Please enter a value for low engagement</p>
         </div>
-        -
-        <div class="formdiv">
+        <p style="padding: .6em .3em;">-</p>
+        <div>
           <input type="text" name="highScore" class="profileinput checkForError formdiv" placeholder="very engaged">
-          <p class="errorMessage">Please enter a username</p>
+          <p class="errorMessage">Please enter a value for high engagement</p>
         </div>
       </div>
       <input type="hidden" name="owner" value="<%= user._id %>">

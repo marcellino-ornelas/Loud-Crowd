@@ -7,7 +7,6 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     _ = require("lodash"),
-    slug = require('speakingurl');
     socket = require("socket.io"),
     middleware = require("./middleware"),
     passport = require('passport'),

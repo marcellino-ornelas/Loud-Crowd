@@ -36,28 +36,14 @@ $(function() {
    *
   */
   var $slider = $("#slider");
-  var $scoreValue = $("#score");
   var $average = $("#average");
-  // var $rate = $("#rate");
-
-  // $rate.on("submit", function(e){
-  //   e.preventDefault();
-  //   $this = $(this);
-  //   // this.submit();
-
-  // })
 
   // initialization
   $.fn.slider && $slider.slider({
     max: 255,
     min: 1,
-    value: $scoreValue.val()
+    value: parseInt($slider.attr("data-value"), 10)
   });
-
-  // $slider.on("slide", function(event, ui){
-  //   var value = ui.value;
-  //   $scoreValue.val(value);
-  // });
 
   $slider.on("slidestop", function(event){
     $.ajax({
@@ -78,7 +64,9 @@ $(function() {
    * Socket.io
   */
 
+
   if( $slider.length > 0){
+
     var socket = io.connect('https://crowd-engagement.herokuapp.com');
 
     socket.on('connection', function() {
@@ -94,7 +82,8 @@ $(function() {
     var red = data;
     var blue = 255 - data;
 
-    $("body").css("background-color", `rgb(${red}, 0, ${blue})`)
+    $body.css("background-color", `rbg(${red}, 0, ${blue})`);
+
   }
 
 });

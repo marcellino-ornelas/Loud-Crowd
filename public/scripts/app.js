@@ -72,16 +72,36 @@ $(function() {
       console.log("connection established");
     });
 
-    socket.on("average", updateAverage );
+    socket.on("average",updateAverage);
   }
 
   function updateAverage(data){
     $average.text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10");
 
     var red = data;
-    var blue = 255 - red;
+    var blue = 255 - data;
 
-    $body.css("background-color", `rbg(${red}, 0, ${blue})`);
+    $body.css("background-color", `rgb(${red}, 0, ${blue})`);
+
   }
+
+  //Contact Form - checking for errors
+    $("form").on("submit", function(event) {
+      var hasError = false;
+      event.preventDefault();
+      $(".checkForError").each(function() {
+        if ($(this).val() === "") {
+          $(this).addClass("error");
+          $(".error").show();
+          $(this).siblings(".errorMessage").show();
+          if(!hasError){ hasError = true;}
+        } else {
+          $(this).removeClass("error");
+          $(this).siblings(".errorMessage").hide();
+        }
+      });
+
+      if(!hasError) this.submit();
+    });
 
 });

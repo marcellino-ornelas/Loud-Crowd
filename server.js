@@ -103,24 +103,28 @@ app.get("/about", function (req, res) {
   res.render("about");
 });
 
-app.get("/events/:id", function(req, res) {
+app.get("/events/:slug", function(req, res) {
 
-  Event.findById(req.params.id).populate("ratings").exec(function(err,event){
+  var slug = req.params.slug;
+  var eventName = slug.split("-").join(" ");
+
+  Event.findOne({eventName: eventName}).populate("ratings").exec(function(err, event){
+    console.log(event);
     if(err || !event){
-      req.flash("error", "Sorry there was a problem trying to get this event. Please try again later")
-      res.redirect("/profile")
+      req.flash("error", "Sorry there was a problem trying to get this event. Please try again later");
+      res.redirect("/profile");
     }
 
     var userRating = req.cookies.voteId && _.find(event.ratings, function(item){
       return item._id.toString() === req.cookies.voteId;
     });
 
-    var formUrl = "/events/"+event._id+"/rating";
+    var formUrl = "/events/" + event._id + "/rating";
 
     if(userRating){
-      formUrl += "/"+userRating._id;
+      formUrl += "/" + userRating._id;
     }
-
+    
     res.render("events/show", {
       event: event,
       userRating: userRating,

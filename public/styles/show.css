@@ -40,16 +40,16 @@ span.ui-slider-handle.ui-corner-all.ui-state-default {
 
 .sliderrating p {
   font-size: 1.5em;
+  padding-top: 1em;
 }
 
-.eventpageslider div.section {
-  padding: 1em 0;
-}
 
-button.button {
-  border: none;
-  padding: .5em;
-  font-size: 1.2em;
-  width: 15em;
-  margin: .75em auto 0 auto;
+
+@media screen and (max-width: 972px) {
+
+  .eventpagetitle {
+    padding-top: 1em;
+    font-size: 2.3em;
+  }
+
 }

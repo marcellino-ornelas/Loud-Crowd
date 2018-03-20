@@ -21,12 +21,26 @@
   <div class="myform profileform">
     <h2>add an event</h2>
     <form method="POST" action="/events">
-      <input type="text" name="eventName" class="profileinput" placeholder="event name">
-      <div><input type="text" name="lowScore" class="profileinput" placeholder="not engaged">-
-      <input type="text" name="highScore" class="profileinput" placeholder="very engaged"></div>
+      <div>
+        <input type="text" name="eventName" class="profileinput checkForError formdiv" placeholder="event name">
+        <p class="errorMessage">Please enter an event</p>
+      </div>
+      <div id="ratingflex">
+        <div>
+          <input type="text" name="lowScore" class="profileinput checkForError formdiv" placeholder="not engaged">
+          <p class="errorMessage">Please enter a value for low engagement</p>
+        </div>
+        <p style="padding: .6em .3em;">-</p>
+        <div>
+          <input type="text" name="highScore" class="profileinput checkForError formdiv" placeholder="very engaged">
+          <p class="errorMessage">Please enter a value for high engagement</p>
+        </div>
+      </div>
       <input type="hidden" name="owner" value="<%= user._id %>">
       <input type="number" name="rating" value="5" style="display: none;">
-      <input type="submit" class="button">
+      <div>
+        <input type="submit" class="button formdiv submit">
+      </div>
     </form>
   </div>
 
@@ -39,9 +53,11 @@
     </tr>
     <% for (let event of events) { %>
       <tr class="" data-id="<%= event._id %>">
-        <th><a href="/events/<%= event._id %>" class=""><%= event.eventName %></a></th>
+        <% var slug = event.eventName.split(" ").join("-");%>
+        <th><a href="/events/<%=slug%>" class=""><%= event.eventName %></a></th>
         <th><%= event.lowScore %> - <%= event.highScore %></th>
-        <th><%= event.average() %></th>
+        <% var average = event.average() * 10 / 255 %>
+        <th><%=average.toFixed(2)%> out of 10</th>
 
 
           <!-- pencil icon to toggle update form -->

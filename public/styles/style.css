@@ -13,14 +13,6 @@ html,body{
   min-height: 100%;
 }
 
-/*nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  height: 3.2em;
-  align-items: center;
-}*/
-
 a {
   color: black;
   text-decoration: none;
@@ -107,7 +99,7 @@ input {
 
 }
 
-a, button, .logo-content, i{
+a, button, .logo-content, i {
   cursor: pointer;
 }
 
@@ -217,7 +209,6 @@ a, button, .logo-content, i{
     border-bottom: 2px solid #e0e0e0;
   }
   .nav-links > .nav-link:hover {
-    /* background-color: #eeeeee; */
     border-color:#45d2e8;
   }
   .nav-links a {

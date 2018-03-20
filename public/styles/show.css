@@ -1,18 +1,30 @@
-.eventpagetitle {
-  text-align: center;
-  color: white;
-  font-family: knewave;
-  font-size: 3em;
-  padding-top: 3em;
+#average {
+  padding: 0 0 2em 0;
+}
+
+#average span {
+  font-size: 4em;
+}
+
+.sliderandtitle {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
 }
 
 .eventpageslider {
   background: white;
   padding: 4em 2em 1em 2em;
-  position: fixed;
   width: 100%;
-  margin-bottom: 2em;
-  bottom: 0;
+  margin-bottom: 0;
+}
+
+.eventpagetitle {
+  text-align: center;
+  color: white;
+  font-family: knewave;
+  font-size: 3em;
+  padding: .5em 0;
 }
 
 .ui-widget.ui-widget-content {
@@ -43,12 +55,9 @@ span.ui-slider-handle.ui-corner-all.ui-state-default {
   padding-top: 1em;
 }
 
-
-
 @media screen and (max-width: 972px) {
 
   .eventpagetitle {
-    padding-top: 1em;
     font-size: 2.3em;
   }
 

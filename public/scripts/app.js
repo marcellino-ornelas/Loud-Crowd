@@ -1,8 +1,6 @@
 $(function() {
 
   var $body = $(document.body);
-  // $body.css("background-color", `rgb(${red}, 0, ${blue})`);
-
   /*
    * Navigation Bar
   */
@@ -79,14 +77,14 @@ $(function() {
     $average.text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10");
 
     var red = data;
-    var blue = 255 - data;
+    var blue = 255- data;
 
     $body.css("background-color", `rgb(${red}, 0, ${blue})`);
 
   }
 
   //Contact Form - checking for errors
-    $("form").on("submit", function(event) {
+    $(".forms").on("submit", function(event) {
       var hasError = false;
       event.preventDefault();
       $(".checkForError").each(function() {

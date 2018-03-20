@@ -36,7 +36,7 @@ a:hover {
   font-size: 1.8em;
   background-image: -webkit-linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
   background-image: linear-gradient(to right, rgb(0,0,255), rgb(255,0,0));
-  color:transparent;
+  color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -238,31 +238,18 @@ a, button, .logo-content, i {
 
 .message {
   display: block;
-  border-radius: 10px;
-  padding: 20px 10px;
+  padding: 1em;
   width: 75%;
   margin: 10px auto;
-
 }
 
-.message.info{
-  color:#03a9f4;
-  background-color:#e1f5fe;
+.message.success {
+  border: .1em solid rgb(0, 210, 230);
+  background-color: white;
 }
 
-.message.success{
-  color:#4caf50;
-  background-color:#c8e6c9;
+.message.error {
+  color: rgb(255, 0, 0);
+  border: .1em solid rgb(255, 0, 0);
+  background-color: white;
 }
-
-.message.warning{
-  color:#ff9800;
-  background-color:#ffe0b2;
-}
-
-.message.error{
-  color: #f44336;
-  background-color:#ffebee;
-}
-
-

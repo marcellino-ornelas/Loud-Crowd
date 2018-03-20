@@ -8,7 +8,7 @@
 }
 
 .profileinput {
-  outline: .1em solid black;
+  border: .09em solid black;
 }
 
 .profileform div {
@@ -38,12 +38,12 @@
 }
 
 th {
-  outline: .1em solid black;
+  border: .09em solid black;
   padding: .7em 0;
 }
 
 .tablelabels th {
-  outline: .1em solid transparent;
+  border: none;
   font-size: 1.5em;
   padding: 0;
 }

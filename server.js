@@ -212,9 +212,9 @@ app.post("/events", middleware.isLoggedIn, function(req, res) {
       function(cb){ req.user.save(cb); },
     ], function(err,results){
       if(err){
-        req.flash("error","Sorry there was a problem saving your event. Make sure all fields are filled out and try again.");
+        req.flash("error","Sorry there was a problem saving your event, the name of your event must be unique.");
       } else {
-        req.flash("success", "You event has been successfully added");
+        req.flash("success", "Your event has been successfully added");
       }
       res.redirect("/profile");
   });

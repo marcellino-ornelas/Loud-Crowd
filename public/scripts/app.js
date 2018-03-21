@@ -33,7 +33,7 @@ $(function() {
    *
   */
   var $slider = $("#slider");
-  var $average = $("#average");
+  var $average = $("#eventaverage");
 
   // initialization
   $.fn.slider && $slider.slider({
@@ -57,10 +57,7 @@ $(function() {
     })
   });
 
-  /*
-   * Socket.io
-  */
-
+  /* Socket.io */
 
   if( $slider.length > 0){
 
@@ -74,7 +71,7 @@ $(function() {
   }
 
   function updateAverage(data){
-    $average.text("Average Score: " + (data * 10 / 255).toFixed(2) + " out of 10");
+    $average.text((data * 10 / 255).toFixed(2));
 
     var red = data;
     var blue = 255- data;

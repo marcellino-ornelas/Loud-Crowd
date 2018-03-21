@@ -19,7 +19,7 @@ EventSchema.methods.average = function () {
     return acc + parseInt( score , 10);
   }, 0);
 
-  return Math.round((finalScore / this.ratings.length)) || 1
+  return Math.round((finalScore / this.ratings.length)) || 0
 };
 
 var Event = mongoose.model("Event", EventSchema);

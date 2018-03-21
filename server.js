@@ -109,7 +109,6 @@ app.get("/events/:slug", function(req, res) {
   var eventName = slug.split("-").join(" ");
 
   Event.findOne({eventName: eventName}).populate("ratings").exec(function(err, event){
-    console.log(event);
     if(err || !event){
       req.flash("error", "Sorry there was a problem trying to get this event. Please try again later");
       res.redirect("/profile");

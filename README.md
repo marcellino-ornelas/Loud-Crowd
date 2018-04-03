@@ -2,7 +2,7 @@
 
 An app where users can rate their experience 
 
-Here a link to the website [Loud Crowd](https://crowd-engagement.herokuapp.com/events/5ab02ec34fa1380014101974)
+Here a link to the website [Loud Crowd](https://crowd-engagement.herokuapp.com/)
 
 ## MVP
 
